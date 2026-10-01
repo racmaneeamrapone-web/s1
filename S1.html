@@ -1,952 +1,398 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WashMate - Ultimate Cyber OS (Complete Edition)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* =========================================
-           THEME VARIABLES (User Mode - Default)
-           ========================================= */
-        :root {
-            --primary: #00e5ff;    
-            --primary-dark: #008b99;
-            --primary-glow: rgba(0, 229, 255, 0.4);
-            --bg-base: #04060b;    
-            --surface: rgba(16, 22, 38, 0.7);
-            --text-main: #f8fafc;
-            --text-muted: #64748b;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --glass-border: rgba(0, 229, 255, 0.15);
-            --shadow-3d: 0 15px 35px rgba(0,0,0,0.8);
-            --shadow-inner: inset 0 2px 10px rgba(255,255,255,0.05);
-        }
-
-        /* ADMIN THEME (ปรับสีให้ซอฟต์ลง ไม่แดงจัดเกินไป ดูน่าใช้ขึ้น) */
-        body.admin-mode {
-            --primary: #ff758f;    
-            --primary-dark: #c9184a;
-            --primary-glow: rgba(255, 117, 143, 0.3);
-            --bg-base: #140a0e;    
-            --surface: rgba(43, 20, 26, 0.7);
-            --glass-border: rgba(255, 117, 143, 0.15);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Prompt', sans-serif; -webkit-tap-highlight-color: transparent; user-select: none; }
-        body { background-color: var(--bg-base); display: flex; justify-content: center; height: 100vh; overflow: hidden; color: var(--text-main); transition: background-color 0.5s ease; }
-
-        /* ขยายความกว้างแอปเป็น 480px ให้ดูกว้างขึ้น */
-        .app-container {
-            width: 100%; max-width: 480px; height: 100%; background: var(--bg-base);
-            position: relative; overflow: hidden; box-shadow: 0 0 50px var(--primary-glow);
-            transition: background-color 0.5s ease, box-shadow 0.5s ease;
-        }
-
-        /* Ambient Cyber Grid */
-        .cyber-grid {
-            position: absolute; top: 0; left: 0; width: 200%; height: 200%; z-index: -1;
-            background-image: linear-gradient(var(--glass-border) 1px, transparent 1px), linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
-            background-size: 30px 30px; transform: rotateX(60deg) translateY(-100px);
-            animation: gridMove 20s linear infinite; opacity: 0.5; transition: background-image 0.5s ease;
-        }
-        @keyframes gridMove { from { transform: rotateX(60deg) translateY(0); } to { transform: rotateX(60deg) translateY(30px); } }
-
-        .screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0; pointer-events: none; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            transform: translateY(30px) scale(0.98); display: flex; flex-direction: column;
-        }
-        .screen.active { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
-
-        /* ROLE TRANSITION OVERLAY */
-        .role-transition {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-base); z-index: 9999; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease;
-        }
-        .role-transition.active { opacity: 1; pointer-events: auto; }
-        .role-transition i { font-size: 4rem; color: var(--primary); margin-bottom: 20px; animation: scanAnim 1.5s infinite alternate; }
-        @keyframes scanAnim { 0% { filter: drop-shadow(0 0 5px var(--primary)); transform: translateY(-10px); } 100% { filter: drop-shadow(0 0 30px var(--primary)); transform: translateY(10px); } }
-
-        /* LOGO 3D */
-        .brand-logo-container { margin: 0 auto 30px; width: 90px; height: 90px; position: relative; perspective: 1000px;}
-        .washer-body { width: 100%; height: 100%; background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.5)); border-radius: 25px; border: 2px solid var(--primary); box-shadow: 0 15px 30px rgba(0,0,0,0.6), inset 0 0 20px var(--primary-glow); display: flex; justify-content: center; align-items: center; transform: rotateY(-10deg) rotateX(10deg); transition: 0.5s; }
-        .washer-door { width: 55px; height: 55px; border-radius: 50%; background: #000; border: 3px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 20px var(--primary-glow); display: flex; justify-content: center; align-items: center; color: var(--primary); font-size: 1.8rem; }
-        .spin-active { animation: washSpin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-        @keyframes washSpin { 0% { transform: rotate(0deg); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg); } }
-
-        /* AUTH FORMS */
-        .auth-container { padding: 40px 25px; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .auth-card { background: var(--surface); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 40px 25px; border-radius: 30px; box-shadow: var(--shadow-3d); text-align: center; }
-        .input-group { position: relative; margin-bottom: 18px; }
-        .input-group i { position: absolute; top: 50%; left: 18px; transform: translateY(-50%); color: var(--text-muted); transition: 0.3s; }
-        .input-field { width: 100%; padding: 16px 15px 16px 50px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.6); color: white; outline: none; transition: 0.3s; box-shadow: var(--shadow-inner); font-size: 0.95rem; }
-        .input-field:focus { border-color: var(--primary); background: rgba(255,255,255,0.05); box-shadow: 0 0 15px rgba(0, 229, 255, 0.1); }
-        .input-field:focus + i { color: var(--primary); filter: drop-shadow(0 0 5px var(--primary)); }
-        .text-link { color: var(--primary); font-size: 0.85rem; cursor: pointer; font-weight: 500; transition: 0.2s; }
-
-        /* BUTTONS & RIPPLE */
-        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .btn-primary { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5); box-shadow: 0 8px 20px var(--primary-glow), inset 0 2px 2px rgba(255,255,255,0.4); }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 25px var(--primary-glow), inset 0 2px 2px rgba(255,255,255,0.5); }
-        .btn-outline { background: rgba(0,0,0,0.4); color: var(--text-main); border: 1px solid var(--glass-border); box-shadow: var(--shadow-inner); }
-        .btn-outline:hover { background: rgba(255,255,255,0.05); border-color: var(--primary); }
-        .btn-danger { background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid var(--danger); }
-        .btn:active { transform: translateY(2px) scale(0.98); box-shadow: none; }
-        .ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.5); transform: scale(0); animation: rippleEffect 0.6s ease-out; pointer-events: none; }
-        @keyframes rippleEffect { to { transform: scale(4); opacity: 0; } }
-
-        /* HEADER & NOTIFICATION BELL */
-        .app-header { padding: 30px 20px 15px; background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-        .header-actions { display: flex; align-items: center; gap: 15px; }
-        .credit-chip { background: rgba(255,255,255,0.05); border: 1px solid var(--primary-glow); padding: 6px 14px; border-radius: 20px; color: var(--primary); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .credit-chip:hover { background: rgba(0,229,255,0.1); }
-        
-        .noti-bell { position: relative; cursor: pointer; color: var(--text-muted); font-size: 1.2rem; transition: 0.3s; }
-        .noti-bell:hover { color: var(--text-main); }
-        .noti-bell.active { color: var(--primary); animation: bellRing 0.5s ease; }
-        .noti-dot { position: absolute; top: -3px; right: -2px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%; display: none; box-shadow: 0 0 10px var(--danger); }
-        .noti-bell.has-noti .noti-dot { display: block; }
-        @keyframes bellRing { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(15deg); } 75% { transform: rotate(-15deg); } }
-
-        /* APP BODY & MACHINE CARDS (เพิ่มรูปภาพเครื่องซักผ้า) */
-        .app-body { flex: 1; overflow-y: auto; padding: 20px 20px 100px; scrollbar-width: none; }
-        .app-body::-webkit-scrollbar { display: none; }
-        .view-section { display: none; animation: slideUpFade 0.4s forwards; opacity: 0; transform: translateY(20px); }
-        .view-section.active { display: block; }
-        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
-
-        .machine-card { 
-            background: var(--surface); border-radius: 24px; padding: 20px; margin-bottom: 18px; 
-            border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); 
-            transition: all 0.3s ease; backdrop-filter: blur(15px);
-        }
-        .machine-card:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.2); }
-        .machine-card.washing { border-color: var(--primary); box-shadow: 0 0 25px var(--primary-glow), inset 0 1px 0 rgba(255,255,255,0.2); }
-        
-        /* Layout สำหรับรูปเครื่องซักผ้า */
-        .machine-header-layout { display: flex; gap: 15px; align-items: flex-start; margin-bottom: 15px; }
-        .machine-img-box { 
-            width: 65px; height: 65px; background: rgba(0,0,0,0.5); border-radius: 16px; 
-            display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.5); position: relative; flex-shrink: 0; overflow: hidden;
-        }
-        .machine-img-box img { width: 75%; height: 75%; object-fit: contain; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); transition: 0.3s; }
-        .machine-card.washing .machine-img-box { border-color: var(--primary); }
-        .machine-card.washing .machine-img-box img { filter: drop-shadow(0 0 8px var(--primary)) brightness(1.2); animation: gentleShake 1s infinite; }
-        @keyframes gentleShake { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(-1px, 1px); } 75% { transform: translate(1px, -1px); } }
-        .machine-info-flex { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 65px; }
-
-        .status-badge { padding: 4px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; width: fit-content; }
-        .badge-idle { background: rgba(16,185,129,0.1); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
-        .badge-busy { background: rgba(0,229,255,0.1); color: var(--primary); border: 1px solid rgba(0,229,255,0.3); }
-        .badge-maint { background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
-
-        /* IoT Sensors */
-        .sensor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
-        .sensor-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.02); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
-        .sensor-box i { font-size: 1rem; margin-bottom: 5px; display: block; opacity: 0.8; }
-        .sensor-val { font-size: 0.9rem; font-weight: 600; color: white; }
-        .sensor-label { font-size: 0.65rem; color: var(--text-muted); }
-        .liquid-progress { width: 100%; height: 8px; background: rgba(0,0,0,0.6); border-radius: 10px; margin: 15px 0; overflow: hidden; position: relative; box-shadow: inset 0 2px 5px rgba(0,0,0,0.8); }
-        .liquid-fill { height: 100%; background: linear-gradient(90deg, var(--primary-dark), var(--primary)); width: 0%; transition: width 1s linear; box-shadow: 0 0 15px var(--primary); }
-
-        /* HISTORY TIMELINE (ดีไซน์ใหม่มีมิติ) */
-        .timeline-container { position: relative; padding-left: 20px; margin-top: 10px; }
-        .timeline-container::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--primary-dark), rgba(255,255,255,0.05)); }
-        .timeline-item { position: relative; margin-bottom: 25px; }
-        .timeline-dot { position: absolute; left: -26px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg-base); border: 2px solid var(--primary); box-shadow: 0 0 10px var(--primary-glow); z-index: 2; }
-        .timeline-content { 
-            background: rgba(0,0,0,0.4); padding: 15px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); 
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: 0.3s; backdrop-filter: blur(5px);
-        }
-        .timeline-content:hover { background: rgba(255,255,255,0.05); transform: translateX(5px); border-color: rgba(255,255,255,0.1); }
-        .timeline-item.done .timeline-dot { border-color: var(--text-muted); box-shadow: none; }
-
-        /* PROFILE 3D, STATS & GAMIFICATION */
-        .profile-3d-card { background: linear-gradient(145deg, rgba(26, 35, 58, 0.9), rgba(16, 22, 38, 0.9)); border: 1px solid var(--glass-border); border-radius: 30px; padding: 30px 20px; text-align: center; box-shadow: var(--shadow-3d); margin-bottom: 20px; }
-        .prof-avatar { width: 80px; height: 80px; border-radius: 50%; background: #020205; border: 2px dashed var(--primary); margin: 0 auto 15px; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; color: var(--primary); animation: borderSpin 10s linear infinite; position: relative; }
-        .prof-avatar i { animation: none; position: absolute; }
-        @keyframes borderSpin { 100% { transform: rotate(360deg); } }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .stat-box { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.03); }
-        .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-
-        /* Achievements System */
-        .achievements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .badge-card { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 16px; display: flex; align-items: center; gap: 12px; opacity: 0.5; filter: grayscale(100%); transition: 0.3s; }
-        .badge-card.unlocked { opacity: 1; filter: grayscale(0%); border-color: var(--primary-glow); background: rgba(0,229,255,0.05); }
-        .badge-icon { width: 35px; height: 35px; border-radius: 10px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 1.1rem; color: var(--primary); }
-        .badge-card.unlocked .badge-icon { background: var(--primary); color: #000; box-shadow: 0 0 10px var(--primary); }
-
-        /* Chat Support System */
-        .chat-container { display: flex; flex-direction: column; height: calc(100vh - 200px); }
-        .chat-box { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 15px; scrollbar-width: none; }
-        .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 0.9rem; line-height: 1.4; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .msg-admin { background: rgba(255,255,255,0.1); border-bottom-left-radius: 5px; align-self: flex-start; border: 1px solid rgba(255,255,255,0.05); }
-        .msg-user { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; border-bottom-right-radius: 5px; align-self: flex-end; }
-        .chat-input-area { display: flex; gap: 10px; margin-top: 10px; }
-
-        /* Report Tag Chips */
-        .tag-scroll { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px; scrollbar-width: none; }
-        .report-tag { padding: 8px 15px; border-radius: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: 0.3s; }
-        .report-tag.active { background: var(--primary-glow); border-color: var(--primary); color: #fff; }
-
-        /* Admin Actionable Reports */
-        .report-admin-card { border-left: 4px solid var(--warning); }
-        .report-admin-card.resolving { border-left-color: var(--primary); }
-        .report-admin-card.resolved { border-left-color: var(--success); opacity: 0.7; }
-
-        /* User Management (Admin - เพิ่มมิติ 3D) */
-        .user-mgmt-card { 
-            display: flex; justify-content: space-between; align-items: center; padding: 16px; 
-            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.5)); 
-            border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; margin-bottom: 12px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4); transition: 0.3s;
-        }
-        .user-mgmt-card:hover { transform: translateY(-3px) scale(1.01); border-color: var(--primary); box-shadow: 0 12px 25px rgba(0,0,0,0.6), 0 0 15px var(--primary-glow); }
-        .user-avatar { width: 45px; height: 45px; border-radius: 50%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; color: var(--primary); border: 1px solid rgba(255,255,255,0.1); flex-shrink:0; }
-
-        /* Bottom Nav */
-        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; padding: 15px 10px 25px; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); cursor: pointer; width: 60px; transition: 0.3s; }
-        .nav-item i { font-size: 1.2rem; margin-bottom: 5px; transition: 0.3s; }
-        .nav-item span { font-size: 0.65rem; font-weight: 500; }
-        .nav-item.active { color: var(--primary); }
-        .nav-item.active i { transform: translateY(-5px) scale(1.2); filter: drop-shadow(0 0 8px var(--primary-glow)); }
-
-        /* Bottom Sheets */
-        .bottom-sheet-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: 0.4s; z-index: 1000; display: flex; align-items: flex-end; }
-        .bottom-sheet-overlay.active { opacity: 1; pointer-events: auto; }
-        .bottom-sheet { width: 100%; max-width: 480px; margin: 0 auto; background: var(--bg-base); border-top: 1px solid var(--primary); border-radius: 30px 30px 0 0; padding: 25px 25px 40px; transform: translateY(100%); transition: 0.4s; box-shadow: 0 -10px 40px var(--primary-glow); }
-        .bottom-sheet-overlay.active .bottom-sheet { transform: translateY(0); }
-        .sheet-handle { width: 50px; height: 5px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 0 auto 20px; }
-        .compact-list-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; margin-bottom: 12px; cursor: pointer; transition: 0.3s; }
-        .compact-list-item.active { border-color: var(--primary); background: rgba(0,229,255,0.1); transform: scale(1.02); }
-
-        /* Notifications Sheet */
-        .noti-item { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 15px; align-items: flex-start; }
-        .noti-icon { width: 40px; height: 40px; border-radius: 12px; background: rgba(0,229,255,0.1); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 1.2rem; flex-shrink: 0; }
-
-        /* =========================================
-           TOAST NOTIFICATION (ทรงแคปซูลเล็ก ไม่บังจอ)
-           ========================================= */
-        #toast-box { 
-            position: absolute; top: 15px; left: 50%; transform: translateX(-50%); z-index: 3000; 
-            width: auto; min-width: 200px; max-width: 85%; display: flex; flex-direction: column; 
-            align-items: center; gap: 8px; pointer-events: none; 
-        }
-        .toast { 
-            background: rgba(10, 14, 25, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); 
-            color: white; padding: 10px 20px; border-radius: 50px; font-size: 0.85rem; display: flex; 
-            align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.6); 
-            animation: toastSlide 0.4s forwards; pointer-events: auto; font-weight: 500;
-        }
-        @keyframes toastSlide { from { opacity: 0; transform: translateY(-20px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WashMate - Cyber OS v3.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--p:#00e5ff;--pd:#008b99;--pg:rgba(0,229,255,.35);--bg:#030509;--sf:rgba(14,20,35,.85);--card:rgba(20,28,48,.65);--tx:#f8fafc;--mu:#7b8aa3;--ok:#10b981;--wr:#f59e0b;--dg:#ef4444;--gb:rgba(0,229,255,.2);--sh:0 18px 36px rgba(0,0,0,.8),inset 0 1px 2px rgba(255,255,255,.12);--in:inset 0 2px 10px rgba(0,0,0,.6);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body.admin{--p:#ff3366;--pd:#990033;--pg:rgba(255,51,102,.35);--bg:#0f0407;--sf:rgba(35,14,20,.88);--card:rgba(50,18,28,.65);--gb:rgba(255,51,102,.25)}
+html,body{height:100%}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Prompt',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;user-select:none}
+input{user-select:text;-webkit-user-select:text}
+body{background:var(--bg);display:flex;justify-content:center;overflow:hidden;color:var(--tx);transition:background .5s}
+.app{width:100%;max-width:480px;height:100%;position:relative;overflow:hidden;box-shadow:0 0 60px var(--pg)}
+.grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--gb) 1px,transparent 1px),linear-gradient(90deg,var(--gb) 1px,transparent 1px);background-size:34px 34px;opacity:.25;animation:gm 20s linear infinite}
+@keyframes gm{to{background-position:0 34px}}
+.orb{position:absolute;width:260px;height:260px;border-radius:50%;background:var(--pg);filter:blur(80px);top:-80px;right:-80px;z-index:0;animation:fl 8s ease-in-out infinite alternate}
+@keyframes fl{to{transform:translate(-40px,60px)}}
+.screen{position:absolute;inset:0;opacity:0;pointer-events:none;transition:.4s cubic-bezier(.16,1,.3,1);transform:translateY(20px) scale(.98);display:flex;flex-direction:column;z-index:1}
+.screen.on{opacity:1;pointer-events:auto;transform:none}
+.trans{position:absolute;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:.3s;gap:14px}
+.trans.on{opacity:1;pointer-events:auto}.trans .e{font-size:4rem;animation:sc 1.2s infinite alternate}
+@keyframes sc{to{filter:drop-shadow(0 0 25px var(--p));transform:translateY(10px)}}
+.auth{padding:24px 18px;height:100%;display:none;flex-direction:column;justify-content:center}
+.auth.on{display:flex}
+.acard{background:var(--sf);backdrop-filter:blur(25px);border:1px solid var(--gb);padding:32px 24px;border-radius:32px;box-shadow:var(--sh);text-align:center}
+.logo{width:92px;height:92px;margin:0 auto 18px;perspective:600px}
+.lb{width:100%;height:100%;border-radius:28px;border:2px solid var(--p);background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(0,0,0,.6));box-shadow:inset 0 0 25px var(--pg),0 15px 30px rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;transform:rotateY(-12deg) rotateX(12deg)}
+.ld{width:58px;height:58px;border-radius:50%;background:#000;border:3px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.7rem;box-shadow:inset 0 0 18px var(--pg)}
+.spin{animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.ig{position:relative;margin-bottom:14px}
+.ig .l{position:absolute;top:50%;left:16px;transform:translateY(-50%);opacity:.7}
+.ig .r{position:absolute;top:50%;right:14px;transform:translateY(-50%);cursor:pointer}
+.inp{width:100%;padding:15px 44px 15px 46px;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.6);color:#fff;outline:none;box-shadow:var(--in);font-size:.95rem;transition:.3s}
+.inp.np{padding-left:18px}
+.inp:focus{border-color:var(--p);box-shadow:0 0 18px var(--pg),var(--in)}
+.lk{color:var(--p);font-size:.85rem;cursor:pointer;font-weight:500}
+.btn{width:100%;padding:15px;border-radius:16px;border:none;font-size:.98rem;font-weight:600;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;transition:.25s;color:var(--tx);background:none;position:relative;overflow:hidden}
+.bp{background:linear-gradient(135deg,var(--pd),var(--p));color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);box-shadow:0 10px 24px var(--pg),inset 0 2px 2px rgba(255,255,255,.35)}
+.bp:hover{transform:translateY(-2px)}
+.bo{background:rgba(0,0,0,.5);border:1px solid var(--gb);box-shadow:var(--in)}
+.bo:hover{border-color:var(--p)}
+.bd{background:rgba(239,68,68,.12);color:var(--dg);border:1px solid var(--dg)}
+.btn:active{transform:scale(.97)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.rp{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rpl .6s ease-out;pointer-events:none;width:20px;height:20px;margin:-10px}
+@keyframes rpl{to{transform:scale(10);opacity:0}}
+.hd{padding:22px 18px 14px;background:var(--sf);backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);display:flex;justify-content:space-between;align-items:center;z-index:10}
+.ha{display:flex;gap:10px;align-items:center}
+.chip{background:rgba(255,255,255,.06);border:1px solid var(--pg);padding:6px 14px;border-radius:20px;color:var(--p);font-weight:600;font-size:.9rem;cursor:pointer;box-shadow:var(--in)}
+.bell{position:relative;cursor:pointer;font-size:1.1rem;padding:6px 9px;background:rgba(0,0,0,.3);border-radius:12px;border:1px solid rgba(255,255,255,.06)}
+.bell i{position:absolute;top:3px;right:3px;width:8px;height:8px;background:var(--dg);border-radius:50%;display:none;box-shadow:0 0 8px var(--dg)}
+.bell.has i{display:block}
+.body{flex:1;overflow-y:auto;padding:18px 18px 110px;scrollbar-width:none}.body::-webkit-scrollbar{display:none}
+.view{display:none}.view.on{display:block;animation:up .4s cubic-bezier(.16,1,.3,1)}
+@keyframes up{from{opacity:0;transform:translateY(16px)}}
+.mc{background:var(--card);border-radius:24px;padding:20px;margin-bottom:16px;border:1px solid rgba(255,255,255,.06);box-shadow:var(--sh);backdrop-filter:blur(18px);transition:.3s}
+.mc.w{border-color:var(--p);box-shadow:0 0 28px var(--pg),var(--sh)}
+.mh{display:flex;gap:14px;margin-bottom:14px}
+.mi{width:68px;height:68px;background:rgba(0,0,0,.6);border-radius:18px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.06);box-shadow:var(--in);flex-shrink:0}
+.mc.w .mi{border-color:var(--p);animation:sk 1s infinite}
+@keyframes sk{50%{transform:translate(1.5px,-1.5px)}}
+.mf{flex:1;display:flex;flex-direction:column;justify-content:space-between;min-height:68px}
+.bg2{padding:4px 11px;border-radius:12px;font-size:.74rem;font-weight:600;width:fit-content}
+.b-i{background:rgba(16,185,129,.12);color:var(--ok);border:1px solid rgba(16,185,129,.3)}
+.b-b{background:rgba(0,229,255,.12);color:var(--p);border:1px solid var(--pg)}
+.b-m{background:rgba(239,68,68,.12);color:var(--dg);border:1px solid rgba(239,68,68,.3)}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0}
+.sb{background:rgba(0,0,0,.5);padding:10px 6px;border-radius:14px;text-align:center;box-shadow:var(--in)}
+.sb b{display:block;font-size:.95rem}.sb small{font-size:.62rem;color:var(--mu);text-transform:uppercase}
+.pr{height:9px;background:rgba(0,0,0,.7);border-radius:10px;margin:14px 0 10px;overflow:hidden;box-shadow:var(--in)}
+.pf{height:100%;background:linear-gradient(90deg,var(--pd),var(--p));box-shadow:0 0 14px var(--p);transition:width 1s linear}
+.row{display:flex;justify-content:space-between;align-items:center}
+.mu{color:var(--mu)}.h3{font-size:.95rem;color:var(--mu);margin-bottom:12px}
+.tags{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px;padding-bottom:4px;scrollbar-width:none}
+.tag{padding:8px 15px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:.82rem;color:var(--mu);cursor:pointer;white-space:nowrap;transition:.25s}
+.tag.on{background:var(--pg);border-color:var(--p);color:#fff;box-shadow:0 0 14px var(--pg)}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}
+.sum div{background:var(--card);border:1px solid var(--gb);border-radius:16px;padding:12px 6px;text-align:center;box-shadow:var(--in)}
+.sum b{color:var(--p);font-size:1.25rem;display:block}.sum small{font-size:.65rem;color:var(--mu)}
+.tl{position:relative;padding-left:22px}
+.tl:before{content:'';position:absolute;left:0;top:8px;bottom:0;width:2px;background:linear-gradient(var(--p),rgba(255,255,255,.05))}
+.ti{position:relative;margin-bottom:16px}
+.ti:before{content:'';position:absolute;left:-27px;top:16px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2.5px solid var(--p);box-shadow:0 0 10px var(--pg)}
+.ti.done:before{border-color:var(--mu);box-shadow:none}
+.tc{background:var(--card);padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center}
+.pc{background:linear-gradient(145deg,rgba(22,30,50,.9),rgba(12,18,32,.9));border:1px solid var(--gb);border-radius:30px;padding:28px 18px;text-align:center;box-shadow:var(--sh);margin-bottom:18px}
+body.admin .pc{background:linear-gradient(145deg,rgba(50,18,28,.9),rgba(30,10,16,.9))}
+.av{width:82px;height:82px;border-radius:50%;background:#020205;border:2.5px dashed var(--p);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:2.3rem;box-shadow:0 0 20px var(--pg)}
+.xp{height:8px;background:rgba(0,0,0,.6);border-radius:8px;overflow:hidden;margin:6px 0 18px}.xp i{display:block;height:100%;background:linear-gradient(90deg,var(--pd),var(--p));transition:width .6s}
+.chart{display:flex;align-items:flex-end;gap:8px;height:90px;margin:10px 0 18px;padding:12px;background:var(--card);border-radius:18px;box-shadow:var(--in)}
+.chart div{flex:1;text-align:center;font-size:.6rem;color:var(--mu);display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.chart i{display:block;background:linear-gradient(0deg,var(--pd),var(--p));border-radius:6px 6px 2px 2px;margin-bottom:4px;min-height:3px;transition:height .6s}
+.ach{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ab{background:var(--card);border:1px solid rgba(255,255,255,.05);padding:12px;border-radius:16px;display:flex;gap:10px;align-items:center;opacity:.4;filter:grayscale(1)}
+.ab.on{opacity:1;filter:none;border-color:var(--pg);box-shadow:0 0 14px var(--pg)}
+.ab span:first-child{font-size:1.5rem}
+.chat{display:flex;flex-direction:column;height:calc(100vh - 230px)}
+.cb{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:6px;scrollbar-width:none}
+.mb{max-width:82%;padding:12px 16px;border-radius:20px;font-size:.88rem;line-height:1.45}
+.ma{background:rgba(255,255,255,.08);border-bottom-left-radius:5px;align-self:flex-start}
+.mus{background:linear-gradient(135deg,var(--pd),var(--p));border-bottom-right-radius:5px;align-self:flex-end}
+.qk{display:flex;gap:8px;overflow-x:auto;margin:8px 0;scrollbar-width:none}
+.nav{position:absolute;bottom:0;left:0;width:100%;background:rgba(4,7,14,.92);backdrop-filter:blur(25px);border-top:1px solid var(--gb);display:flex;justify-content:space-around;padding:12px 8px calc(16px + env(safe-area-inset-bottom,0px));z-index:100}
+.ni{display:flex;flex-direction:column;align-items:center;color:var(--mu);cursor:pointer;width:64px;transition:.3s;font-size:.65rem}
+.ni b{font-size:1.3rem;transition:.3s;filter:grayscale(1)}
+.ni.on{color:var(--p)}.ni.on b{transform:translateY(-4px) scale(1.2);filter:none}
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:.35s;z-index:2000;display:flex;align-items:flex-end}
+.ov.on{opacity:1;pointer-events:auto}
+.sheet{width:100%;max-height:88%;overflow-y:auto;background:var(--bg);border-top:1px solid var(--p);border-radius:32px 32px 0 0;padding:22px 22px calc(34px + env(safe-area-inset-bottom,0px));transform:translateY(100%);transition:.4s cubic-bezier(.16,1,.3,1);box-shadow:0 -15px 50px var(--pg)}
+.ov.on .sheet{transform:none}
+.hdl{width:50px;height:5px;background:rgba(255,255,255,.3);border-radius:10px;margin:0 auto 18px;cursor:pointer}
+.li{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:18px;margin-bottom:10px;cursor:pointer;transition:.25s;box-shadow:var(--in)}
+.li.on{border-color:var(--p);background:var(--pg);transform:scale(1.02)}
+.amts{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px}
+.amt{padding:12px 4px;border-radius:14px;border:1px solid var(--gb);background:rgba(0,0,0,.5);color:var(--tx);font-weight:600;cursor:pointer;transition:.25s;text-align:center;font-size:.95rem}
+.amt.on{background:linear-gradient(135deg,var(--pd),var(--p));border-color:var(--p);box-shadow:0 0 16px var(--pg);transform:translateY(-2px)}
+.amt small{display:block;font-size:.6rem;color:var(--wr);font-weight:500}.amt.on small{color:#fff}
+.bonus{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--wr);padding:10px;border-radius:14px;font-size:.82rem;text-align:center;margin-bottom:14px}
+.ni2{padding:14px 4px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;gap:12px}
+.ni2 b{width:40px;height:40px;border-radius:12px;background:var(--pg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vc{display:flex;justify-content:space-between;align-items:center;padding:14px;background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:18px;margin-bottom:12px;gap:8px}
+#toast{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:4000;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90%}
+.toast{background:rgba(12,18,32,.96);backdrop-filter:blur(15px);border:1px solid var(--gb);padding:11px 20px;border-radius:50px;font-size:.86rem;display:flex;gap:10px;align-items:center;box-shadow:0 12px 28px rgba(0,0,0,.8),0 0 18px var(--pg);animation:ts .4s cubic-bezier(.16,1,.3,1)}
+@keyframes ts{from{opacity:0;transform:translateY(-20px) scale(.9)}}
+.ad{margin-top:8px;display:flex;gap:8px}
+.cfx{position:absolute;inset:0;pointer-events:none;z-index:5000;overflow:hidden}
+.cfx i{position:absolute;top:-20px;font-style:normal;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}
+</style>
 </head>
 <body>
+<div class="app">
+<div class="grid"></div><div class="orb"></div><div class="cfx" id="cfx"></div>
+<div class="trans" id="trans"><div class="e">🧬</div><h2 id="tt" style="color:var(--p)">Authenticating...</h2></div>
 
-<div class="app-container" id="app-container">
-    <div class="cyber-grid"></div>
-
-    <!-- Role Transition Overlay -->
-    <div id="role-transition" class="role-transition">
-        <i class="fa-solid fa-fingerprint"></i>
-        <h2 id="trans-text" style="color: var(--primary);">Authenticating...</h2>
-    </div>
-    
-    <!-- =========================================
-         SCREEN 1: AUTHENTICATION (Login, Reg, Forgot)
-         ========================================= -->
-    <div id="auth-screen" class="screen active">
-        
-        <!-- LOGIN FORM -->
-        <div class="auth-container" id="form-login">
-            <div class="auth-card">
-                <div class="brand-logo-container">
-                    <div class="washer-body"><div class="washer-door" id="logo-door"><i class="fa-solid fa-droplet"></i></div></div>
-                </div>
-                <h1 style="margin-bottom: 5px; font-size: 2rem; color: var(--primary);">WashMate</h1>
-                <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 0.9rem;">Ultimate Cyber OS</p>
-                
-                <div class="input-group">
-                    <input type="text" id="login-user" class="input-field" placeholder="Username" value="Sirichai.p">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <div class="input-group">
-                    <input type="password" class="input-field" placeholder="Password" value="password123">
-                    <i class="fa-solid fa-lock"></i>
-                </div>
-                
-                <button class="btn btn-primary btn-ripple" onclick="app.login('user')" style="margin-bottom: 15px;">เข้าสู่ระบบ (User)</button>
-                <button class="btn btn-outline btn-ripple" onclick="app.login('admin')" style="margin-bottom: 25px; border-color: rgba(255,117,143,0.5); color: #ff758f;">เข้าสู่ระบบจัดการ (Admin)</button>
-                
-                <div style="display: flex; justify-content: space-between; padding: 0 10px;">
-                    <span class="text-link" onclick="app.switchAuth('register')">สร้างบัญชีใหม่</span>
-                    <span class="text-link" style="color: var(--text-muted);" onclick="app.switchAuth('forgot')">ลืมรหัสผ่าน?</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- REGISTER FORM -->
-        <div class="auth-container" id="form-register" style="display: none;">
-            <div class="auth-card">
-                <h2 style="margin-bottom: 25px; color: var(--primary);">สมัครสมาชิกใหม่</h2>
-                <div class="input-group"><input type="text" class="input-field" placeholder="ชื่อ-นามสกุล"><i class="fa-solid fa-font"></i></div>
-                <div class="input-group"><input type="text" class="input-field" placeholder="ชื่อผู้ใช้ (Username)"><i class="fa-solid fa-user-astronaut"></i></div>
-                <div class="input-group"><input type="password" class="input-field" placeholder="รหัสผ่าน"><i class="fa-solid fa-lock"></i></div>
-                <div class="input-group"><input type="password" class="input-field" placeholder="ยืนยันรหัสผ่าน"><i class="fa-solid fa-shield-halved"></i></div>
-                <button class="btn btn-primary btn-ripple" style="margin: 20px 0;" onclick="app.showToast('ลงทะเบียนสำเร็จ!', 'success'); app.switchAuth('login')">ยืนยันการสมัคร</button>
-                <span class="text-link" onclick="app.switchAuth('login')"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</span>
-            </div>
-        </div>
-
-        <!-- FORGOT PASSWORD FORM -->
-        <div class="auth-container" id="form-forgot" style="display: none;">
-            <div class="auth-card">
-                <div style="font-size: 3rem; color: var(--warning); margin-bottom: 10px;"><i class="fa-solid fa-unlock-keyhole"></i></div>
-                <h2 style="margin-bottom: 10px; color: var(--warning);">ลืมรหัสผ่าน?</h2>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px;">กรอกชื่อผู้ใช้เพื่อรับลิงก์รีเซ็ตรหัสผ่าน</p>
-                <div class="input-group"><input type="text" class="input-field" placeholder="Username หรือ รหัสนิสิต"><i class="fa-solid fa-user"></i></div>
-                <button class="btn btn-outline btn-ripple" style="margin: 20px 0; border-color: var(--warning); color: var(--warning);" onclick="app.showToast('ส่งลิงก์ไปยังอีเมลแล้ว', 'success'); app.switchAuth('login')">ขอรหัสผ่านใหม่</button>
-                <span class="text-link" onclick="app.switchAuth('login')"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========================================
-         SCREEN 2: MAIN APP (USER)
-         ========================================= -->
-    <div id="user-screen" class="screen">
-        <div class="app-header">
-            <div>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2px;">Welcome back,</p>
-                <h3 style="font-size: 1.2rem;" id="ui-username">พี่บิว</h3>
-            </div>
-            <div class="header-actions">
-                <div class="credit-chip btn-ripple" onclick="app.openSheet('sheet-topup')">
-                    ฿<span id="ui-credit">150.00</span> <i class="fa-solid fa-plus" style="font-size:0.7rem; margin-left:5px;"></i>
-                </div>
-                <div class="noti-bell" id="bell-icon" onclick="app.openSheet('sheet-noti')">
-                    <i class="fa-solid fa-bell"></i>
-                    <span class="noti-dot"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="app-body">
-            <!-- 1. HOME VIEW (เพิ่มรูปเครื่องซักผ้า) -->
-            <div id="view-home" class="view-section active">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="font-size: 1rem; color: var(--text-muted);">ตู้ซักผ้าทั้งหมด (หอใน)</h3>
-                    <i class="fa-solid fa-rotate-right btn-ripple" style="color: var(--primary); padding:5px; cursor:pointer;" onclick="app.showToast('อัปเดตข้อมูลล่าสุด', 'success')"></i>
-                </div>
-                <div id="machine-list"></div>
-            </div>
-
-            <!-- 2. CHAT SUPPORT VIEW (แจ้งเตือนเข้า LINE) -->
-            <div id="view-chat" class="view-section">
-                <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 15px;">ติดต่อแอดมิน (แจ้งทาง LINE ทันที)</h3>
-                <div class="chat-container">
-                    <div class="chat-box" id="chat-messages">
-                        <div class="msg-bubble msg-admin">สวัสดีครับ แอดมิน WashMate ยินดีให้บริการ หากพบปัญหาเครื่องกินเงินหรือตู้เสีย แจ้งได้เลยครับ ข้อความจะเด้งเข้า LINE แอดมินทันที 🤖</div>
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chat-input" class="input-field" placeholder="พิมพ์ข้อความที่นี่..." style="padding:12px 15px; border-radius:12px;">
-                        <button class="btn btn-primary btn-ripple" style="width: 50px; border-radius:12px; padding:0;" onclick="app.sendChat()"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. HISTORY VIEW (ดีไซน์ใหม่แบบ Timeline) -->
-            <div id="view-history" class="view-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="font-size: 1rem; color: var(--text-muted);">ประวัติการใช้งานของฉัน</h3>
-                    <span style="font-size: 0.8rem; background:rgba(255,255,255,0.1); padding:4px 10px; border-radius:10px;">เดือนนี้</span>
-                </div>
-                <!-- แก้ให้เป็น Timeline Container -->
-                <div class="timeline-container" id="history-list"></div>
-            </div>
-
-            <!-- 4. PROFILE & GAMIFICATION VIEW -->
-            <div id="view-profile" class="view-section">
-                <div class="profile-3d-card">
-                    <div class="prof-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
-                    <h2 id="prof-name" style="margin-bottom: 5px; font-size: 1.3rem;">ศิริชัย พิมกุล</h2>
-                    <p style="color: var(--primary); font-size: 0.9rem; margin-bottom: 25px;"><i class="fa-solid fa-door-open"></i> ห้องพัก <span id="prof-room">A-204</span></p>
-                    
-                    <div class="stat-grid">
-                        <div class="stat-box">
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 5px;">ซักไปแล้ว</p>
-                            <div class="stat-num" id="stat-count">12 <span style="font-size:0.8rem; color:white; font-weight:400;">ครั้ง</span></div>
-                        </div>
-                        <div class="stat-box">
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 5px;">ใช้จ่ายรวม</p>
-                            <div class="stat-num" id="stat-spent">460 <span style="font-size:0.8rem; color:white; font-weight:400;">บาท</span></div>
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-outline btn-ripple" style="margin-bottom: 15px;" onclick="app.openSheet('sheet-edit-profile')"><i class="fa-solid fa-pen-nib"></i> แก้ไขข้อมูลส่วนตัว</button>
-                    <button class="btn btn-danger btn-ripple" style="margin-bottom: 25px;" onclick="app.logout()"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
-                </div>
-
-                <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom:15px;">เหรียญตรา (Achievements)</h3>
-                <div class="achievements-grid">
-                    <div class="badge-card unlocked">
-                        <div class="badge-icon"><i class="fa-solid fa-moon"></i></div>
-                        <div><strong style="font-size:0.85rem; display:block;">Night Owl</strong><span style="font-size:0.65rem; color:var(--text-muted);">ซักหลังเที่ยงคืน</span></div>
-                    </div>
-                    <div class="badge-card unlocked">
-                        <div class="badge-icon"><i class="fa-solid fa-fire"></i></div>
-                        <div><strong style="font-size:0.85rem; display:block;">Clean Freak</strong><span style="font-size:0.65rem; color:var(--text-muted);">ซัก 3 ครั้ง/สัปดาห์</span></div>
-                    </div>
-                    <div class="badge-card">
-                        <div class="badge-icon"><i class="fa-solid fa-gem"></i></div>
-                        <div><strong style="font-size:0.85rem; display:block;">Rich Kid</strong><span style="font-size:0.65rem; color:var(--text-muted);">เติมเงินสะสม 1000฿</span></div>
-                    </div>
-                    <div class="badge-card">
-                        <div class="badge-icon"><i class="fa-solid fa-bug"></i></div>
-                        <div><strong style="font-size:0.85rem; display:block;">Bug Hunter</strong><span style="font-size:0.65rem; color:var(--text-muted);">แจ้งซ่อมสำเร็จ 1 ครั้ง</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <nav class="bottom-nav">
-            <div class="nav-item active btn-ripple" onclick="app.switchTab('home', this)"><i class="fa-solid fa-layer-group"></i><span>ตู้ซัก</span></div>
-            <div class="nav-item btn-ripple" onclick="app.switchTab('chat', this)"><i class="fa-solid fa-headset"></i><span>ติดต่อ</span></div>
-            <div class="nav-item btn-ripple" onclick="app.switchTab('history', this)"><i class="fa-solid fa-clock-rotate-left"></i><span>ประวัติ</span></div>
-            <div class="nav-item btn-ripple" onclick="app.switchTab('profile', this)"><i class="fa-solid fa-user-astronaut"></i><span>โปรไฟล์</span></div>
-        </nav>
-    </div>
-
-    <!-- =========================================
-         SCREEN 3: ADMIN APP (Soft Pink/Red Theme)
-         ========================================= -->
-    <div id="admin-screen" class="screen">
-        <div class="app-header">
-            <div>
-                <p style="font-size: 0.8rem; color: var(--primary); margin-bottom: 2px;">Admin OS</p>
-                <h3 style="font-size: 1.2rem;">Control Center</h3>
-            </div>
-            <div class="header-actions">
-                <i class="fa-solid fa-right-from-bracket btn-ripple" style="color: var(--text-muted); font-size: 1.2rem;" onclick="app.logout()"></i>
-            </div>
-        </div>
-
-        <div class="app-body">
-            <!-- 1. DASHBOARD -->
-            <div id="admin-view-dash" class="view-section active">
-                <div style="background: var(--surface); padding: 25px; border-radius: 24px; border: 1px solid var(--glass-border); margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom:5px;">รายได้รวม (Real-time)</p>
-                    <h1 style="color: var(--primary); font-size: 2.5rem; text-shadow: 0 0 15px var(--primary-glow);">฿<span id="admin-revenue">1,250</span></h1>
-                </div>
-                <h3 style="margin-bottom: 15px; font-size: 1rem; color: var(--text-muted);">จัดการตู้ซักผ้า</h3>
-                <div id="admin-machine-list"></div>
-            </div>
-
-            <!-- 2. USERS MANAGEMENT (ฟังก์ชันมีมิติเพิ่มขึ้น) -->
-            <div id="admin-view-users" class="view-section">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-                    <h3 style="font-size: 1rem; color: var(--text-muted);">ผู้ใช้งานทั้งหมด</h3>
-                    <div style="background:rgba(255,255,255,0.1); padding:4px 10px; border-radius:10px; font-size:0.75rem;"><i class="fa-solid fa-users"></i> 128 คน</div>
-                </div>
-                
-                <div class="user-mgmt-card">
-                    <div style="display:flex; gap:15px; align-items:center;">
-                        <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
-                        <div>
-                            <strong style="display:block;">ศิริชัย พิมกุล</strong>
-                            <span style="font-size:0.75rem; color:var(--text-muted);">เครดิต: ฿150.00 | ซัก: 12 ครั้ง</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-outline" style="width:40px; height:40px; padding:0; border-radius:12px; border-color:var(--primary); color:var(--primary);" onclick="app.showToast('เปิดแท็บจัดการผู้ใช้', 'success')"><i class="fa-solid fa-pen"></i></button>
-                </div>
-                <div class="user-mgmt-card">
-                    <div style="display:flex; gap:15px; align-items:center;">
-                        <div class="user-avatar" style="color:var(--text-muted);"><i class="fa-solid fa-user"></i></div>
-                        <div>
-                            <strong style="display:block;">สมปอง รักเรียน</strong>
-                            <span style="font-size:0.75rem; color:var(--text-muted);">เครดิต: ฿20.00 | ซัก: 3 ครั้ง</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-outline" style="width:40px; height:40px; padding:0; border-radius:12px;"><i class="fa-solid fa-pen"></i></button>
-                </div>
-            </div>
-
-            <!-- 3. REPORTS -->
-            <div id="admin-view-reports" class="view-section">
-                <h3 style="margin-bottom: 15px; font-size: 1rem; color: var(--text-muted);">รายการแจ้งซ่อม</h3>
-                <div id="admin-report-list"></div>
-            </div>
-        </div>
-
-        <nav class="bottom-nav">
-            <div class="nav-item active btn-ripple" onclick="app.switchTabAdmin('dash', this)"><i class="fa-solid fa-toolbox"></i><span>จัดการตู้</span></div>
-            <div class="nav-item btn-ripple" onclick="app.switchTabAdmin('users', this)"><i class="fa-solid fa-users"></i><span>ผู้ใช้</span></div>
-            <div class="nav-item btn-ripple" onclick="app.switchTabAdmin('reports', this)"><i class="fa-solid fa-triangle-exclamation"></i><span>แจ้งซ่อม</span></div>
-        </nav>
-    </div>
-
-    <!-- =========================================
-         BOTTOM SHEETS (อยู่ครบทุกหน้าต่างเป๊ะๆ)
-         ========================================= -->
-    <div id="toast-box"></div>
-
-    <!-- Sheet: Booking -->
-    <div class="bottom-sheet-overlay" id="sheet-book">
-        <div class="bottom-sheet">
-            <div class="sheet-handle" onclick="app.closeSheet('sheet-book')"></div>
-            <div style="margin-bottom: 25px; text-align: center;">
-                <h2 id="book-name" style="font-size: 1.3rem; color: var(--primary);">เครื่องซักผ้า</h2>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">เลือกระบบการซักที่ต้องการ</p>
-            </div>
-            <div class="compact-list-item active btn-ripple" onclick="app.selectMode(this, 1, 30)">
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <div style="width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,0.05); display:flex; justify-content:center; align-items:center;"><i class="fa-solid fa-bolt" style="font-size:1.2rem;"></i></div>
-                    <div><strong style="display:block; font-size:1rem;">ซักด่วน</strong><span style="font-size:0.75rem; color:var(--text-muted);">1 นาที (ประหยัดเวลา)</span></div>
-                </div>
-                <strong style="color:var(--primary); font-size:1.2rem;">฿30</strong>
-            </div>
-            <div class="compact-list-item btn-ripple" onclick="app.selectMode(this, 2, 40)">
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <div style="width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,0.05); display:flex; justify-content:center; align-items:center;"><i class="fa-solid fa-shirt" style="font-size:1.2rem;"></i></div>
-                    <div><strong style="display:block; font-size:1rem;">ซักสะอาดล้ำลึก</strong><span style="font-size:0.75rem; color:var(--text-muted);">2 นาที (ขจัดคราบฝังลึก)</span></div>
-                </div>
-                <strong style="color:var(--primary); font-size:1.2rem;">฿40</strong>
-            </div>
-            <button class="btn btn-primary btn-ripple" style="margin-top: 20px; padding: 18px;" onclick="app.confirmBooking()">ยืนยันชำระเงิน</button>
-        </div>
-    </div>
-
-    <!-- Sheet: Topup -->
-    <div class="bottom-sheet-overlay" id="sheet-topup">
-        <div class="bottom-sheet">
-            <div class="sheet-handle" onclick="app.closeSheet('sheet-topup')"></div>
-            <h3 style="text-align:center; margin-bottom: 20px;">สแกนเพื่อเติมเงิน</h3>
-            <div style="width: 180px; height: 180px; background: white; border-radius: 20px; margin: 0 auto 25px; display:flex; justify-content:center; align-items:center; box-shadow: 0 10px 30px rgba(255,255,255,0.2);">
-                <i class="fa-solid fa-qrcode" style="font-size: 8rem; color: #000;"></i>
-            </div>
-            <button class="btn btn-outline btn-ripple" onclick="app.simulateTopup()">จำลองโอนสำเร็จ (+฿100)</button>
-        </div>
-    </div>
-
-    <!-- Sheet: Report (User Side) -->
-    <div class="bottom-sheet-overlay" id="sheet-report">
-        <div class="bottom-sheet">
-            <div class="sheet-handle" onclick="app.closeSheet('sheet-report')"></div>
-            <h3 style="color: var(--danger); margin-bottom: 5px;"><i class="fa-solid fa-wrench"></i> แจ้งปัญหาการใช้งาน</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">ตู้: <strong id="report-name" style="color:white;"></strong></p>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">เลือกอาการที่พบ (Quick Tags)</p>
-            <div class="tag-scroll">
-                <div class="report-tag active" onclick="app.selectTag(this)">ระบบน้ำขัดข้อง/น้ำรั่ว</div>
-                <div class="report-tag" onclick="app.selectTag(this)">เครื่องกินเงิน</div>
-                <div class="report-tag" onclick="app.selectTag(this)">ฝาตู้ปิดไม่สนิท</div>
-                <div class="report-tag" onclick="app.selectTag(this)">เครื่องไม่ปั่นหมาด</div>
-            </div>
-            <div class="input-group" style="margin-top: 10px;">
-                <input type="text" id="report-desc" class="input-field" placeholder="อธิบายเพิ่มเติม (ถ้ามี)">
-                <i class="fa-solid fa-pen"></i>
-            </div>
-            <button class="btn btn-primary btn-ripple" style="margin-top: 15px;" onclick="app.submitReport()">ส่งเรื่องให้แอดมิน</button>
-        </div>
-    </div>
-
-    <!-- Sheet: Edit Profile -->
-    <div class="bottom-sheet-overlay" id="sheet-edit-profile">
-        <div class="bottom-sheet">
-            <div class="sheet-handle" onclick="app.closeSheet('sheet-edit-profile')"></div>
-            <h3 style="margin-bottom: 25px; text-align:center;">แก้ไขข้อมูลส่วนตัว</h3>
-            <div class="input-group"><input type="text" id="edit-name" class="input-field" placeholder="ชื่อ-นามสกุล"><i class="fa-solid fa-font"></i></div>
-            <div class="input-group"><input type="text" id="edit-room" class="input-field" placeholder="เลขห้อง"><i class="fa-solid fa-door-open"></i></div>
-            <button class="btn btn-primary btn-ripple" style="margin-top: 20px;" onclick="app.saveProfile()">บันทึกข้อมูล</button>
-        </div>
-    </div>
-
-    <!-- Sheet: Notifications -->
-    <div class="bottom-sheet-overlay" id="sheet-noti">
-        <div class="bottom-sheet" style="height: 70vh; display:flex; flex-direction:column;">
-            <div class="sheet-handle" onclick="app.closeSheet('sheet-noti')"></div>
-            <h3 style="margin-bottom: 20px;">การแจ้งเตือน</h3>
-            <div id="noti-list" style="overflow-y:auto; flex:1; padding-bottom:20px;"></div>
-        </div>
-    </div>
-
+<!-- AUTH -->
+<div id="s-auth" class="screen on">
+ <div class="auth on" id="a-login"><div class="acard">
+  <div class="logo"><div class="lb"><div class="ld" id="ldoor">💧</div></div></div>
+  <h1 style="font-size:2rem;color:var(--p);text-shadow:0 0 15px var(--pg)">WashMate</h1>
+  <p class="mu" style="margin:4px 0 24px;font-size:.88rem">Ultimate Cyber OS Enterprise v3.1</p>
+  <div class="ig"><span class="l">👤</span><input class="inp" id="lu" placeholder="Username" value="Sirichai.p"></div>
+  <div class="ig"><span class="l">🔒</span><input class="inp" id="lp" type="password" value="password123"><span class="r" onclick="A.eye('lp',this)">👁️</span></div>
+  <button class="btn bp" onclick="A.login('user')" style="margin-bottom:12px">เข้าสู่ระบบ (User)</button>
+  <button class="btn bo" onclick="A.login('admin')" style="margin-bottom:20px;border-color:rgba(255,51,102,.4);color:#ff3366">เข้าสู่ระบบจัดการ (Admin)</button>
+  <div class="row" style="padding:0 8px"><span class="lk" onclick="A.auth('reg')">สร้างบัญชีใหม่</span><span class="lk mu" onclick="A.auth('forgot')">ลืมรหัสผ่าน?</span></div>
+ </div></div>
+ <div class="auth" id="a-reg"><div class="acard">
+  <h2 style="margin-bottom:20px;color:var(--p)">สมัครสมาชิกใหม่</h2>
+  <div class="ig"><span class="l">🔤</span><input class="inp" id="rn" placeholder="ชื่อ-นามสกุล"></div>
+  <div class="ig"><span class="l">🧑‍🚀</span><input class="inp" id="ru" placeholder="Username"></div>
+  <div class="ig"><span class="l">🔒</span><input class="inp" id="rp" type="password" placeholder="รหัสผ่าน (อย่างน้อย 6 ตัว)"><span class="r" onclick="A.eye('rp',this)">👁️</span></div>
+  <button class="btn bp" style="margin:14px 0" onclick="A.register()">ยืนยันการสมัคร</button>
+  <span class="lk" onclick="A.auth('login')">← กลับไปหน้าเข้าสู่ระบบ</span>
+ </div></div>
+ <div class="auth" id="a-forgot"><div class="acard">
+  <div style="font-size:3rem">🔓</div><h2 style="margin:8px 0;color:var(--wr)">ลืมรหัสผ่าน?</h2>
+  <p class="mu" style="font-size:.85rem;margin-bottom:18px">กรอกชื่อผู้ใช้เพื่อรับลิงก์รีเซ็ตรหัสผ่าน</p>
+  <div class="ig"><span class="l">👤</span><input class="inp" placeholder="Username"></div>
+  <button class="btn bo" style="margin:14px 0;border-color:var(--wr);color:var(--wr)" onclick="A.toast('ส่งลิงก์ไปยังอีเมลแล้ว');A.auth('login')">ขอรหัสผ่านใหม่</button>
+  <span class="lk" onclick="A.auth('login')">← กลับ</span>
+ </div></div>
 </div>
 
-<!-- =========================================
-     JAVASCRIPT LOGIC (ระบบหลังบ้านทำงานเต็ม 100%)
-     ========================================= -->
+<!-- USER -->
+<div id="s-user" class="screen">
+ <div class="hd"><div><p class="mu" style="font-size:.76rem">Welcome back,</p><h3 id="uname">-</h3></div>
+  <div class="ha"><div class="chip" onclick="A.open('sh-top')">฿<span id="ucr">0</span> ＋</div><div class="bell" id="bell" onclick="A.open('sh-noti')">🔔<i></i></div></div></div>
+ <div class="body">
+  <div class="view on" id="v-home">
+   <div class="sum"><div><b id="k-free">0</b><small>ว่าง</small></div><div><b id="k-busy">0</b><small>กำลังซัก</small></div><div><b id="k-down">0</b><small>ปิดซ่อม</small></div></div>
+   <div class="tags" id="flt"></div>
+   <div id="mlist"></div>
+  </div>
+  <div class="view" id="v-chat">
+   <h3 class="h3">ติดต่อแอดมิน</h3>
+   <div class="chat"><div class="cb" id="cb"><div class="mb ma">สวัสดีครับ แอดมิน WashMate ยินดีให้บริการ 🤖 พิมพ์ถามหรือเลือกหัวข้อด้านล่างได้เลยครับ</div></div>
+    <div class="qk"><div class="tag" onclick="A.quick(this)">ราคาเท่าไหร่?</div><div class="tag" onclick="A.quick(this)">เครื่องกินเงิน</div><div class="tag" onclick="A.quick(this)">เปิดกี่โมง?</div></div>
+    <div class="row" style="gap:8px"><input class="inp np" id="ci" placeholder="พิมพ์ข้อความ..." style="padding:12px 14px" onkeydown="if(event.key==='Enter')A.chat()"><button class="btn bp" style="width:50px;padding:12px" onclick="A.chat()">➤</button></div></div>
+  </div>
+  <div class="view" id="v-hist"><div class="row"><h3 class="h3">ประวัติการใช้งาน</h3><span class="mu" style="font-size:.75rem" id="hsum"></span></div><div class="tl" id="hl"></div></div>
+  <div class="view" id="v-prof">
+   <div class="pc"><div class="av">🧑‍🚀</div><h2 id="pn" style="font-size:1.25rem"></h2>
+    <p style="color:var(--p);font-size:.86rem;margin:4px 0 14px">🚪 ห้องพัก <span id="pr"></span></p>
+    <div class="row" style="font-size:.78rem"><b id="lv" style="color:var(--p)">Lv.1</b><span class="mu" id="xt"></span></div><div class="xp"><i id="xb" style="width:0"></i></div>
+    <div class="sum" style="grid-template-columns:1fr 1fr"><div><b id="sc">0</b><small>ซักไปแล้ว (ครั้ง)</small></div><div><b id="ss">0</b><small>ใช้จ่ายรวม (บาท)</small></div></div>
+    <button class="btn bo" style="margin-bottom:10px" onclick="A.editP()">✏️ แก้ไขข้อมูลส่วนตัว</button>
+    <button class="btn bd" onclick="A.logout()">🚪 ออกจากระบบ</button></div>
+   <h3 class="h3">การใช้งาน 7 วันล่าสุด</h3><div class="chart" id="chart"></div>
+   <h3 class="h3">เหรียญตรา</h3><div class="ach" id="ach"></div>
+  </div>
+ </div>
+ <nav class="nav" id="unav"><div class="ni on" onclick="A.tab('home',this)"><b>🧺</b>ตู้ซัก</div><div class="ni" onclick="A.tab('chat',this)"><b>🎧</b>ติดต่อ</div><div class="ni" onclick="A.tab('hist',this)"><b>🕘</b>ประวัติ</div><div class="ni" onclick="A.tab('prof',this)"><b>🧑‍🚀</b>โปรไฟล์</div></nav>
+</div>
+
+<!-- ADMIN -->
+<div id="s-admin" class="screen">
+ <div class="hd"><div><p style="font-size:.76rem;color:var(--p)">Admin OS Control</p><h3>Command Center</h3></div><span style="cursor:pointer;font-size:1.3rem" onclick="A.logout()">🚪</span></div>
+ <div class="body">
+  <div class="view on" id="v-adash">
+   <div class="mc" style="text-align:center"><p class="mu" style="font-size:.85rem">รายได้รวมระบบ (Real-time)</p><h1 style="color:var(--p);font-size:2.3rem;text-shadow:0 0 20px var(--pg)">฿<span id="rev">0</span></h1></div>
+   <h3 class="h3">จัดการตู้ซักผ้า IoT</h3><div id="alist"></div>
+  </div>
+  <div class="view" id="v-avis"><h3 class="h3">ผู้ทดลองระบบ (Live Logs)</h3><div id="vlist"></div></div>
+  <div class="view" id="v-arep"><h3 class="h3">รายการแจ้งซ่อม</h3><div id="rlist"></div></div>
+ </div>
+ <nav class="nav" id="anav"><div class="ni on" onclick="A.tabA('adash',this)"><b>🛠️</b>จัดการตู้</div><div class="ni" onclick="A.tabA('avis',this)"><b>👥</b>ผู้ทดลอง</div><div class="ni" onclick="A.tabA('arep',this)"><b>⚠️</b>แจ้งซ่อม</div></nav>
+</div>
+
+<div id="toast"></div>
+
+<!-- SHEETS -->
+<div class="ov" id="sh-book" onclick="A.ovc(event,'sh-book')"><div class="sheet">
+ <div class="hdl" onclick="A.close('sh-book')"></div>
+ <div style="text-align:center;margin-bottom:16px"><h2 id="bn" style="color:var(--p);font-size:1.2rem"></h2><p class="mu" style="font-size:.8rem">เลือกระบบซักและตัวเสริม</p></div>
+ <div id="modes"></div>
+ <p class="mu" style="font-size:.78rem;margin:12px 0 8px">ตัวเสริม</p><div id="addons"></div>
+ <button class="btn bp" style="margin-top:8px" id="bbtn" onclick="A.confirm()">ยืนยันชำระเงิน</button>
+</div></div>
+
+<div class="ov" id="sh-top" onclick="A.ovc(event,'sh-top')"><div class="sheet">
+ <div class="hdl" onclick="A.close('sh-top')"></div>
+ <h3 style="text-align:center;margin-bottom:14px">เติมเงินเข้ากระเป๋า</h3>
+ <div class="amts" id="amts"></div>
+ <div class="ig"><input class="inp np" id="tin" type="number" inputmode="numeric" min="10" max="5000" placeholder="ระบุจำนวนเงินเอง (10 - 5,000 บาท)" oninput="A.tIn()"></div>
+ <div class="bonus" id="tb">เติม ฿300 ขึ้นไปรับโบนัส +฿20 · ฿500 ขึ้นไปรับ +฿50</div>
+ <div style="width:130px;height:130px;background:#fff;border-radius:16px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:5.5rem;color:#000">▦</div>
+ <button class="btn bp" id="tbtn" onclick="A.topup()">จำลองสแกนโอนเงินสำเร็จ</button>
+</div></div>
+
+<div class="ov" id="sh-rep" onclick="A.ovc(event,'sh-rep')"><div class="sheet">
+ <div class="hdl" onclick="A.close('sh-rep')"></div>
+ <h3 style="color:var(--dg)">🔧 แจ้งปัญหาการใช้งาน</h3>
+ <p class="mu" style="font-size:.85rem;margin:4px 0 12px">ตู้: <b id="rn2" style="color:#fff"></b></p>
+ <div class="tags" id="rtags"></div>
+ <div class="ig"><input class="inp np" id="rd" placeholder="อธิบายเพิ่มเติม (ถ้ามี)"></div>
+ <button class="btn bp" onclick="A.report()">ส่งเรื่องให้แอดมินทันที</button>
+</div></div>
+
+<div class="ov" id="sh-edit" onclick="A.ovc(event,'sh-edit')"><div class="sheet">
+ <div class="hdl" onclick="A.close('sh-edit')"></div>
+ <h3 style="text-align:center;margin-bottom:18px">แก้ไขข้อมูลส่วนตัว</h3>
+ <div class="ig"><input class="inp np" id="en" placeholder="ชื่อ-นามสกุล"></div>
+ <div class="ig"><input class="inp np" id="er" placeholder="เลขห้อง"></div>
+ <button class="btn bp" onclick="A.saveP()">บันทึกข้อมูล</button>
+</div></div>
+
+<div class="ov" id="sh-noti" onclick="A.ovc(event,'sh-noti')"><div class="sheet" style="height:66%">
+ <div class="hdl" onclick="A.close('sh-noti')"></div>
+ <h3 style="margin-bottom:12px">การแจ้งเตือนระบบ</h3><div id="nl"></div>
+</div></div>
+</div>
+
 <script>
-    const app = {
-        user: { name: "ศิริชัย พิมกุล", room: "A-204", credit: 150.00, totalWashes: 12, totalSpent: 460 },
-        admin: { revenue: 1250 },
-        selectedMachine: null,
-        selectedMode: { time: 1, price: 30, text: "ซักด่วน" },
-        activeReportTag: "ระบบน้ำขัดข้อง/น้ำรั่ว",
-        
-        // รูปภาพไอคอนเครื่องซักผ้า
-        imgWasher: "https://cdn-icons-png.flaticon.com/512/872/872117.png",
-        
-        machines: [
-            { id: "M1", name: "เครื่องฝาหน้า No.1", status: "idle", time: 0, maxTime: 0, sensor: { water: 0, temp: 28, rpm: 0 }, timer: null },
-            { id: "M2", name: "เครื่องฝาบน No.2", status: "busy", time: 2, maxTime: 5, sensor: { water: 65, temp: 32, rpm: 800 }, timer: null },
-            { id: "M3", name: "ตู้อบผ้า No.3", status: "maintenance", time: 0, maxTime: 0, sensor: { water: 0, temp: 0, rpm: 0 }, timer: null }
-        ],
-        history: [
-            { date: "วันนี้ 09:30", machine: "เครื่องฝาบน No.2", price: 40, status: "สำเร็จ" },
-            { date: "เมื่อวาน 14:00", machine: "เครื่องฝาหน้า No.1", price: 30, status: "สำเร็จ" }
-        ],
-        reports: [
-            { id: 1, machine: "ตู้อบผ้า No.3", tag: "ฝาตู้ปิดไม่สนิท", desc: "ยางขอบประตูลอก", status: "pending", time: "10 นาทีที่แล้ว" }
-        ],
-        notifications: [
-            { title: "ยินดีต้อนรับ", desc: "WashMate อัปเกรดเวอร์ชันใหม่แล้ว!", time: "เพิ่งอัปเดต" }
-        ],
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=id=>document.getElementById(id);
+const washer=(c='var(--p)')=>`<svg width="46" height="46" viewBox="0 0 48 48" fill="none"><rect x="6" y="4" width="36" height="40" rx="8" stroke="${c}" stroke-width="2.5"/><circle cx="24" cy="27" r="11" stroke="${c}" stroke-width="2.5"/><path d="M17 27q3.5-5 7 0t7 0" stroke="${c}" stroke-width="2" stroke-linecap="round"/><circle cx="14" cy="11" r="1.8" fill="${c}"/><circle cx="20" cy="11" r="1.8" fill="${c}"/></svg>`;
+const fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+const MODES=[{n:'ซักด่วน',d:'1 นาที · ประหยัดเวลา',s:60,p:30,e:'⚡'},{n:'ซักสะอาดล้ำลึก',d:'2 นาที · ขจัดคราบฝังลึก',s:120,p:40,e:'👕'}];
+const ADDONS=[{n:'น้ำยาปรับผ้านุ่ม',p:5,e:'🌸'},{n:'ล้างน้ำเพิ่ม 1 รอบ',p:10,e:'💦',s:20}];
+const TAGS=['ระบบน้ำขัดข้อง/น้ำรั่ว','เครื่องกินเงิน','ฝาตู้ปิดไม่สนิท','เครื่องไม่ปั่นหมาด'];
+const AMTS=[[50,0],[100,0],[300,20],[500,50]];
+const A={
+ u:{name:'ศิริชัย พิมกุล',room:'A-204',credit:150,washes:12,spent:460},rev:1250,
+ week:[1,0,2,1,3,1,2],sel:null,mode:0,adds:[],tag:TAGS[0],flt:'all',topAmt:100,
+ M:[{id:'M1',n:'เครื่องฝาหน้า No.1',t:'w',st:'idle',left:0,max:0,s:{w:0,t:28,r:0}},{id:'M2',n:'เครื่องฝาบน No.2',t:'w',st:'busy',left:120,max:300,s:{w:65,t:32,r:800}},{id:'M3',n:'ตู้อบผ้า No.3',t:'d',st:'maint',left:0,max:0,s:{w:0,t:0,r:0}}],
+ hist:[{d:'วันนี้ 09:30',m:'เครื่องฝาบน No.2',p:40,s:'สำเร็จ'},{d:'เมื่อวาน 14:00',m:'เครื่องฝาหน้า No.1',p:30,s:'สำเร็จ'}],
+ reps:[{m:'ตู้อบผ้า No.3',tag:'ฝาตู้ปิดไม่สนิท',d:'ยางขอบประตูลอก',st:'pending',t:'10 นาทีที่แล้ว'}],
+ noti:[{t:'ยินดีต้อนรับ',d:'WashMate อัปเกรดเป็น v3.1 แล้ว!',tm:'เพิ่งอัปเดต'}],
+ vis:[{n:'Sirichai Phumkun',r:'User / Developer',tm:'เมื่อสักครู่',ip:'192.168.1.45'},{n:'Sompong R.',r:'Tester',tm:'15 นาทีที่แล้ว',ip:'192.168.1.88'},{n:'Guest #992',r:'Visitor',tm:'1 ชั่วโมงที่แล้ว',ip:'10.0.0.12'}],
 
-        init: function() {
-            this.setupRippleEffect();
-            this.startSensors();
-            this.machines.forEach(m => { if(m.status === 'busy') this.runTimer(m); });
-            this.updateNotiIcon();
-        },
-
-        setupRippleEffect: function() {
-            document.querySelectorAll('.btn-ripple').forEach(btn => {
-                btn.addEventListener('mousedown', function(e) {
-                    let rect = this.getBoundingClientRect();
-                    let x = e.clientX - rect.left; let y = e.clientY - rect.top;
-                    let ripple = document.createElement('span');
-                    ripple.className = 'ripple'; ripple.style.left = x + 'px'; ripple.style.top = y + 'px';
-                    this.appendChild(ripple);
-                    setTimeout(() => ripple.remove(), 600);
-                });
-            });
-        },
-
-        switchAuth: function(formId) {
-            document.querySelectorAll('.auth-container').forEach(el => el.style.display = 'none');
-            document.getElementById(`form-${formId}`).style.display = 'flex';
-        },
-
-        login: function(role) {
-            const trans = document.getElementById('role-transition');
-            const transText = document.getElementById('trans-text');
-            const logo = document.getElementById('logo-door');
-            
-            logo.classList.add('spin-active');
-            trans.classList.add('active');
-            
-            if (role === 'admin') {
-                transText.innerText = "Authenticating Admin...";
-                document.body.classList.add('admin-mode');
-            } else {
-                transText.innerText = "Loading WashMate...";
-                document.body.classList.remove('admin-mode');
-            }
-
-            setTimeout(() => {
-                logo.classList.remove('spin-active');
-                document.getElementById('auth-screen').classList.remove('active');
-                
-                if (role === 'admin') {
-                    document.getElementById('admin-screen').classList.add('active');
-                    this.renderAdminMachines();
-                    this.renderAdminReports();
-                } else {
-                    document.getElementById('user-screen').classList.add('active');
-                    this.updateUserUI(); 
-                    this.renderUserMachines();
-                    this.renderHistory();
-                    this.renderNoti();
-                }
-                
-                trans.classList.remove('active');
-                this.showToast(`เข้าสู่ระบบ ${role === 'admin' ? 'Admin' : 'User'} สำเร็จ`, "success");
-            }, 1500);
-        },
-
-        logout: function() {
-            const trans = document.getElementById('role-transition');
-            document.getElementById('trans-text').innerText = "Logging out...";
-            trans.classList.add('active');
-
-            setTimeout(() => {
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.body.classList.remove('admin-mode'); 
-                document.getElementById('auth-screen').classList.add('active');
-                this.switchTab('home', document.querySelectorAll('#user-screen .nav-item')[0]);
-                this.switchTabAdmin('dash', document.querySelectorAll('#admin-screen .nav-item')[0]);
-                this.switchAuth('login');
-                trans.classList.remove('active');
-            }, 800);
-        },
-
-        switchTab: function(tab, el) {
-            document.querySelectorAll('#user-screen .view-section').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('#user-screen .nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(`view-${tab}`).classList.add('active'); el.classList.add('active');
-        },
-        
-        switchTabAdmin: function(tab, el) {
-            document.querySelectorAll('#admin-screen .view-section').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('#admin-screen .nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(`admin-view-${tab}`).classList.add('active'); el.classList.add('active');
-        },
-
-        updateUserUI: function() {
-            document.getElementById('ui-username').innerText = this.user.name.split(' ')[0];
-            document.getElementById('ui-credit').innerText = this.user.credit.toFixed(2);
-            document.getElementById('prof-name').innerText = this.user.name;
-            document.getElementById('prof-room').innerText = this.user.room;
-            document.getElementById('stat-count').innerHTML = `${this.user.totalWashes} <span style="font-size:0.8rem; color:white; font-weight:400;">ครั้ง</span>`;
-            document.getElementById('stat-spent').innerHTML = `${this.user.totalSpent} <span style="font-size:0.8rem; color:white; font-weight:400;">บาท</span>`;
-        },
-
-        renderUserMachines: function() {
-            const list = document.getElementById('machine-list');
-            list.innerHTML = '';
-            this.machines.forEach(m => {
-                const isIdle = m.status === 'idle'; const isBusy = m.status === 'busy';
-                let prog = isIdle ? 0 : ((m.maxTime - m.time) / m.maxTime) * 100;
-                
-                list.innerHTML += `
-                    <div class="machine-card ${isBusy ? 'washing' : ''}" style="${m.status === 'maintenance' ? 'opacity:0.6;' : ''}">
-                        
-                        <!-- เพิ่มรูปรวมใน Card ให้ดูไม่เทอะทะ มีมิติ -->
-                        <div class="machine-header-layout">
-                            <div class="machine-img-box"><img src="${this.imgWasher}" alt="washer"></div>
-                            <div class="machine-info-flex">
-                                <h4 style="font-size:1.05rem;">${m.name}</h4>
-                                <span class="status-badge ${isIdle ? 'badge-idle' : (isBusy ? 'badge-busy' : 'badge-maint')}">
-                                    ${isIdle ? 'พร้อมใช้งาน' : (isBusy ? 'กำลังซัก' : 'ปิดซ่อม')}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="sensor-grid">
-                            <div class="sensor-box"><i class="fa-solid fa-water" style="color:${isIdle?'inherit':'var(--primary)'}"></i><div class="sensor-val" id="water-${m.id}">${m.sensor.water}%</div><div class="sensor-label">Water</div></div>
-                            <div class="sensor-box"><i class="fa-solid fa-temperature-half" style="color:${isIdle?'inherit':'var(--danger)'}"></i><div class="sensor-val" id="temp-${m.id}">${m.sensor.temp}°C</div><div class="sensor-label">Temp</div></div>
-                            <div class="sensor-box"><i class="fa-solid fa-gauge-high" style="color:${isIdle?'inherit':'var(--warning)'}"></i><div class="sensor-val" id="rpm-${m.id}">${m.sensor.rpm}</div><div class="sensor-label">RPM</div></div>
-                        </div>
-                        ${isIdle ? `
-                            <div style="display:flex; gap:12px;">
-                                <button class="btn btn-primary btn-ripple" style="flex:3; padding:12px;" onclick="app.openBookSheet('${m.id}')">จองคิวซักผ้า</button>
-                                <button class="btn btn-outline btn-ripple" style="flex:1; padding:12px;" onclick="app.openReportSheet('${m.id}')"><i class="fa-solid fa-triangle-exclamation"></i></button>
-                            </div>
-                        ` : (isBusy ? `
-                            <div class="liquid-progress"><div class="liquid-fill" style="width:${prog}%"></div></div>
-                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--primary); font-weight:600;">
-                                <span><i class="fa-solid fa-hurricane spin-active"></i> ระบบทำงาน</span> <span>เหลือ ${m.time} นาที</span>
-                            </div>
-                        ` : `<button class="btn btn-outline" disabled style="padding:12px; width:100%; border-color:var(--danger); color:var(--danger);">ระบบระงับการใช้งาน</button>`)}
-                    </div>
-                `;
-            });
-            this.setupRippleEffect();
-        },
-
-        openBookSheet: function(id) {
-            this.selectedMachine = this.machines.find(x => x.id === id);
-            document.getElementById('book-name').innerText = this.selectedMachine.name;
-            this.openSheet('sheet-book');
-        },
-        selectMode: function(el, time, price) {
-            document.querySelectorAll('.compact-list-item').forEach(c => c.classList.remove('active'));
-            el.classList.add('active'); this.selectedMode = { time, price, text: el.innerText.split('\n')[1].trim() };
-        },
-        confirmBooking: function() {
-            if(this.user.credit < this.selectedMode.price) { this.showToast("เงินไม่พอ กรุณาเติมเงิน", "error"); return; }
-            this.user.credit -= this.selectedMode.price; this.user.totalWashes += 1; this.user.totalSpent += this.selectedMode.price; this.admin.revenue += this.selectedMode.price; 
-            
-            this.selectedMachine.status = 'busy'; this.selectedMachine.time = this.selectedMode.time; this.selectedMachine.maxTime = this.selectedMode.time;
-            this.selectedMachine.sensor = { water: 40, temp: 30, rpm: 400 };
-
-            this.history.unshift({ date: "กำลังซัก", machine: this.selectedMachine.name, price: this.selectedMode.price, status: "กำลังทำงาน" });
-            this.addNotification("เริ่มซักผ้า", `ส่งคำสั่งไปยัง ${this.selectedMachine.name} แล้ว`);
-            
-            this.updateUserUI(); this.renderUserMachines(); this.renderHistory(); this.renderAdminMachines();
-            this.closeSheet('sheet-book'); this.showToast(`เริ่มทำงาน ${this.selectedMachine.name}`, "success");
-            this.runTimer(this.selectedMachine);
-        },
-        runTimer: function(m) {
-            m.timer = setInterval(() => {
-                if(m.status !== 'busy') { clearInterval(m.timer); return; }
-                if(m.time > 0) { m.time--; this.renderUserMachines(); }
-                else {
-                    clearInterval(m.timer); m.status = 'idle'; m.sensor = { water: 0, temp: 28, rpm: 0 };
-                    this.showToast(`✅ ${m.name} ซักเสร็จแล้ว`, "success");
-                    this.history[0].date = "เพิ่งเสร็จ"; this.history[0].status = "สำเร็จ";
-                    this.addNotification("ซักผ้าเสร็จสิ้น!", `กรุณาไปรับผ้าที่ ${m.name}`);
-                    this.renderUserMachines(); this.renderHistory(); this.renderAdminMachines();
-                }
-            }, 1000);
-        },
-
-        /* ================= LINE NOTIFY SYSTEM ================= */
-        sendLineNotify: function(msg) {
-            // วิธีใช้: เอา Webhook URL ของ LINE (หรือ Make.com, Google Apps Script) มาใส่ในบรรทัดด้านล่าง
-            const webhookUrl = "YOUR_LINE_WEBHOOK_URL_HERE"; 
-            /*
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: msg, user: this.user.name })
-            }).catch(e => console.log('Simulated Webhook Error')); 
-            */
-            console.log(`[LINE Notify ส่งหาแอดมิน] ข้อความ: ${msg}`);
-        },
-
-        sendChat: function() {
-            const input = document.getElementById('chat-input');
-            if(!input.value) return;
-            const chatBox = document.getElementById('chat-messages');
-            chatBox.innerHTML += `<div class="msg-bubble msg-user">${input.value}</div>`;
-            
-            // เรียกฟังก์ชันส่ง LINE
-            this.sendLineNotify(`ลูกค้า ${this.user.name} ติดต่อว่า: ${input.value}`);
-
-            input.value = ''; chatBox.scrollTop = chatBox.scrollHeight;
-            
-            setTimeout(() => {
-                chatBox.innerHTML += `<div class="msg-bubble msg-admin">รับทราบครับ แอดมินได้รับข้อความแล้ว จะรีบดำเนินการให้นะครับ (ระบบแจ้งเตือนเข้า LINE แอดมินแล้ว)</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 1500);
-        },
-
-        openReportSheet: function(id) {
-            this.selectedMachine = this.machines.find(x => x.id === id);
-            document.getElementById('report-name').innerText = this.selectedMachine.name;
-            document.getElementById('report-desc').value = ""; this.openSheet('sheet-report');
-        },
-        selectTag: function(el) { document.querySelectorAll('.report-tag').forEach(t => t.classList.remove('active')); el.classList.add('active'); this.activeReportTag = el.innerText; },
-        submitReport: function() {
-            const desc = document.getElementById('report-desc').value;
-            this.reports.unshift({ id: Date.now(), machine: this.selectedMachine.name, tag: this.activeReportTag, desc: desc || "ไม่มีรายละเอียด", status: "pending", time: "เพิ่งแจ้ง" });
-            
-            // เรียกฟังก์ชันส่ง LINE เมื่อมีการแจ้งซ่อม
-            this.sendLineNotify(`แจ้งซ่อมตู้ ${this.selectedMachine.name} อาการ: ${this.activeReportTag} (${desc || 'ไม่มี'})`);
-
-            this.selectedMachine.status = 'maintenance'; this.renderUserMachines(); this.closeSheet('sheet-report'); this.showToast("ส่งเรื่องและแจ้ง LINE แอดมินแล้ว", "success");
-        },
-
-        /* ปรับปรุงดีไซน์ประวัติให้เป็น Timeline สวยๆ มีมิติ */
-        renderHistory: function() {
-            const list = document.getElementById('history-list'); list.innerHTML = '';
-            this.history.forEach(h => {
-                const isDone = h.status === 'สำเร็จ';
-                list.innerHTML += `
-                    <div class="timeline-item ${isDone ? 'done' : ''}">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div>
-                                <strong style="font-size:0.95rem;">${h.machine}</strong><br>
-                                <span style="font-size:0.75rem; color:${isDone ? 'var(--text-muted)' : 'var(--primary)'};">${h.date}</span>
-                            </div>
-                            <div style="text-align:right;">
-                                <strong style="color:var(--primary); display:block;">฿${h.price}</strong>
-                                <span style="font-size:0.7rem; color:${isDone ? 'var(--success)' : 'var(--warning)'};">${h.status}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        },
-
-        updateNotiIcon: function() { const bell = document.getElementById('bell-icon'); if(this.notifications.length > 0) bell.classList.add('has-noti'); },
-        addNotification: function(title, desc) {
-            this.notifications.unshift({ title: title, desc: desc, time: "เมื่อสักครู่" });
-            const bell = document.getElementById('bell-icon'); bell.classList.add('has-noti', 'active'); setTimeout(() => bell.classList.remove('active'), 500); this.renderNoti();
-        },
-        renderNoti: function() {
-            const list = document.getElementById('noti-list'); list.innerHTML = '';
-            this.notifications.forEach(n => {
-                list.innerHTML += `<div class="noti-item"><div class="noti-icon"><i class="fa-solid fa-message"></i></div><div><strong style="font-size:0.95rem;">${n.title}</strong><p style="font-size:0.8rem; color:var(--text-muted); margin-top:3px;">${n.desc}</p><span style="font-size:0.7rem; color:var(--primary); display:block;">${n.time}</span></div></div>`;
-            });
-        },
-
-        renderAdminMachines: function() {
-            document.getElementById('admin-revenue').innerText = this.admin.revenue.toLocaleString();
-            const list = document.getElementById('admin-machine-list'); list.innerHTML = '';
-            this.machines.forEach(m => {
-                const isBroken = m.status === 'maintenance';
-                list.innerHTML += `
-                    <div class="machine-card" style="padding: 16px; display:flex; justify-content:space-between; align-items:center;">
-                        <div style="display:flex; align-items:center; gap:12px;">
-                            <div class="machine-img-box" style="width:45px; height:45px;"><img src="${this.imgWasher}" alt="washer"></div>
-                            <div><strong style="font-size:1rem;">${m.name}</strong><br><span style="font-size:0.75rem; color:${isBroken ? 'var(--primary)' : 'var(--success)'};">สถานะ: ${isBroken ? 'เสีย / ปิดซ่อม' : 'ปกติ'}</span></div>
-                        </div>
-                        <button class="btn btn-outline btn-ripple" style="width:auto; padding:8px 15px; border-color: ${isBroken ? 'var(--success)' : 'var(--primary)'}; color: ${isBroken ? 'var(--success)' : 'var(--primary)'};" onclick="app.toggleMaintenance('${m.id}')">${isBroken ? 'เปิดใช้งาน' : 'สั่งระงับตู้'}</button>
-                    </div>
-                `;
-            });
-            this.setupRippleEffect();
-        },
-        toggleMaintenance: function(id) {
-            const m = this.machines.find(x => x.id === id); m.status = m.status === 'maintenance' ? 'idle' : 'maintenance';
-            this.renderAdminMachines(); this.showToast(`อัปเดตสถานะ ${m.name} แล้ว`, "success");
-        },
-
-        renderAdminReports: function() {
-            const list = document.getElementById('admin-report-list'); list.innerHTML = '';
-            if (this.reports.length === 0) { list.innerHTML = `<p style="text-align:center; color:var(--text-muted); margin-top:20px;">ไม่มีรายการแจ้งซ่อม</p>`; return; }
-            this.reports.forEach((r, index) => {
-                let statusText, statusColor, actionBtn;
-                if (r.status === 'pending') { statusText = "รอดำเนินการ"; statusColor = "var(--warning)"; actionBtn = `<button class="btn btn-outline btn-ripple" style="padding:8px; font-size:0.8rem; border-color:var(--primary); color:var(--primary);" onclick="app.updateReportStatus(${index}, 'resolving')"><i class="fa-solid fa-hammer"></i> รับเรื่องซ่อม</button>`; } 
-                else if (r.status === 'resolving') { statusText = "กำลังซ่อมแซม"; statusColor = "var(--primary)"; actionBtn = `<button class="btn btn-primary btn-ripple" style="padding:8px; font-size:0.8rem;" onclick="app.updateReportStatus(${index}, 'resolved')"><i class="fa-solid fa-check"></i> ซ่อมเสร็จแล้ว</button>`; } 
-                else { statusText = "แก้ไขแล้ว"; statusColor = "var(--success)"; actionBtn = `<span style="font-size:0.8rem; color:var(--text-muted);"><i class="fa-solid fa-check-double"></i> ปิดงาน</span>`; }
-
-                list.innerHTML += `
-                    <div class="machine-card report-admin-card ${r.status}" style="padding: 18px;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><strong style="font-size:1rem; color:#fff;">${r.machine}</strong><span style="font-size:0.75rem; color:${statusColor};">${r.time}</span></div>
-                        <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; margin-bottom: 15px;"><span style="background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 8px; font-size: 0.75rem; color: #fff;">${r.tag}</span><p style="font-size:0.85rem; color:var(--text-muted); margin-top:8px;">" ${r.desc} "</p></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:0.8rem; color:${statusColor}; font-weight:600;">${statusText}</span>${actionBtn}</div>
-                    </div>
-                `;
-            });
-            this.setupRippleEffect();
-        },
-        updateReportStatus: function(index, newStatus) {
-            this.reports[index].status = newStatus;
-            if (newStatus === 'resolved') {
-                const m = this.machines.find(x => x.name === this.reports[index].machine); if (m) m.status = 'idle';
-                this.showToast(`ซ่อม ${this.reports[index].machine} เสร็จสิ้นแล้ว`, "success");
-            } else { this.showToast(`รับเรื่องแจ้งซ่อมแล้ว`, "success"); }
-            this.renderAdminReports(); this.renderAdminMachines();
-        },
-
-        openSheet: function(id) { document.getElementById(id).classList.add('active'); if(id === 'sheet-noti') { document.getElementById('bell-icon').classList.remove('has-noti'); } },
-        closeSheet: function(id) { document.getElementById(id).classList.remove('active'); },
-        simulateTopup: function() { this.user.credit += 100; this.updateUserUI(); this.closeSheet('sheet-topup'); this.addNotification("เติมเงินสำเร็จ", "ยอดเงิน +100 บาท เข้าสู่ระบบแล้ว"); this.showToast("เติมเงิน 100 บาทสำเร็จ", "success"); },
-        saveProfile: function() { this.user.name = document.getElementById('edit-name').value || this.user.name; this.user.room = document.getElementById('edit-room').value || this.user.room; this.updateUserUI(); this.closeSheet('sheet-edit-profile'); this.showToast("อัปเดตข้อมูลสำเร็จ", "success"); },
-
-        startSensors: function() {
-            setInterval(() => {
-                this.machines.forEach(m => {
-                    if(m.status === 'busy') {
-                        m.sensor.temp += (Math.random() > 0.5 ? 1 : -1); if(m.sensor.water < 95) m.sensor.water += 2; m.sensor.rpm = Math.floor(Math.random() * (1200 - 800 + 1)) + 800; 
-                        if(document.getElementById(`temp-${m.id}`)) { document.getElementById(`temp-${m.id}`).innerText = m.sensor.temp + "°C"; document.getElementById(`water-${m.id}`).innerText = m.sensor.water + "%"; document.getElementById(`rpm-${m.id}`).innerText = m.sensor.rpm; }
-                    }
-                });
-            }, 1500);
-        },
-
-        showToast: function(msg, type) {
-            const box = document.getElementById('toast-box'); const t = document.createElement('div'); t.className = 'toast';
-            const iconColor = document.body.classList.contains('admin-mode') ? 'var(--primary)' : (type === 'error' ? 'var(--danger)' : 'var(--primary)');
-            t.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'}" style="color:${iconColor}; font-size:1.2rem;"></i> <span>${msg}</span>`;
-            box.appendChild(t); setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(), 400); }, 2500);
-        }
-    };
-
-    app.init();
+ init(){
+  document.addEventListener('pointerdown',e=>{const b=e.target.closest('.btn');if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement('span');s.className='rp';s.style.left=e.clientX-r.left+'px';s.style.top=e.clientY-r.top+'px';b.appendChild(s);setTimeout(()=>s.remove(),600)});
+  $('amts').innerHTML=AMTS.map(([a,b])=>`<div class="amt" data-a="${a}" onclick="A.setAmt(${a})">${a}${b?`<small>+${b}</small>`:'<small>&nbsp;</small>'}</div>`).join('');
+  $('rtags').innerHTML=TAGS.map((t,i)=>`<div class="tag ${i?'':'on'}" onclick="A.pickTag(this)">${t}</div>`).join('');
+  this.setAmt(100);this.bellOn();
+  setInterval(()=>this.tick(),1000);
+ },
+ eye(id,el){const f=$(id);f.type=f.type==='password'?'text':'password';el.textContent=f.type==='password'?'👁️':'🙈'},
+ auth(f){document.querySelectorAll('.auth').forEach(e=>e.classList.remove('on'));$('a-'+f).classList.add('on')},
+ register(){
+  const n=$('rn').value.trim(),u=$('ru').value.trim(),p=$('rp').value;
+  if(!n||!u)return this.toast('กรุณากรอกชื่อและ Username','error');
+  if(p.length<6)return this.toast('รหัสผ่านต้องมีอย่างน้อย 6 ตัว','error');
+  this.u.name=n;this.vis.unshift({n:`${n} (${u})`,r:'Registered User',tm:'เพิ่งสมัคร',ip:'192.168.1.'+(Math.random()*200|0)});
+  this.toast('ลงทะเบียนสำเร็จ!');this.auth('login');$('lu').value=u;
+ },
+ login(role){
+  if(!$('lu').value.trim()||!$('lp').value)return this.toast('กรอก Username และรหัสผ่านก่อน','error');
+  $('ldoor').classList.add('spin');$('tt').textContent=role==='admin'?'Authenticating Admin Command...':'Loading WashMate Cyber OS...';
+  $('trans').classList.add('on');document.body.classList.toggle('admin',role==='admin');
+  setTimeout(()=>{$('ldoor').classList.remove('spin');$('s-auth').classList.remove('on');
+   if(role==='admin'){$('s-admin').classList.add('on');this.rAdmin()}else{$('s-user').classList.add('on');this.rUser()}
+   $('trans').classList.remove('on');this.toast('เข้าสู่ระบบสำเร็จ');},1000);
+ },
+ logout(){
+  $('tt').textContent='Logging out securely...';$('trans').classList.add('on');
+  setTimeout(()=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.body.classList.remove('admin');$('s-auth').classList.add('on');this.auth('login');$('trans').classList.remove('on')},600);
+ },
+ tab(t,el){document.querySelectorAll('#s-user .view').forEach(v=>v.classList.remove('on'));document.querySelectorAll('#unav .ni').forEach(n=>n.classList.remove('on'));$('v-'+t).classList.add('on');el.classList.add('on');if(t==='prof')this.rProf()},
+ tabA(t,el){document.querySelectorAll('#s-admin .view').forEach(v=>v.classList.remove('on'));document.querySelectorAll('#anav .ni').forEach(n=>n.classList.remove('on'));$('v-'+t).classList.add('on');el.classList.add('on')},
+ rUser(){$('uname').textContent=this.u.name.split(' ')[0];$('ucr').textContent=this.u.credit.toFixed(2);this.rMach();this.rHist();this.rNoti();this.rProf()},
+ rMach(){
+  const c={free:0,busy:0,down:0};this.M.forEach(m=>c[m.st==='idle'?'free':m.st==='busy'?'busy':'down']++);
+  $('k-free').textContent=c.free;$('k-busy').textContent=c.busy;$('k-down').textContent=c.down;
+  $('flt').innerHTML=[['all','ทั้งหมด'],['idle','ว่าง'],['busy','กำลังซัก'],['w','เครื่องซัก'],['d','ตู้อบ']].map(([k,l])=>`<div class="tag ${this.flt===k?'on':''}" onclick="A.setFlt('${k}')">${l}</div>`).join('');
+  const L=this.M.filter(m=>this.flt==='all'||m.st===this.flt||m.t===this.flt);
+  $('mlist').innerHTML=L.length?L.map(m=>{
+   const i=m.st==='idle',b=m.st==='busy',pg=b?(m.max-m.left)/m.max*100:0;
+   return `<div class="mc ${b?'w':''}" style="${m.st==='maint'?'opacity:.6':''}"><div class="mh"><div class="mi">${m.t==='d'?'<span style="font-size:2rem">🌬️</span>':washer(b?'var(--p)':'#9fb0c8')}</div><div class="mf"><h4>${m.n}</h4><span class="bg2 ${i?'b-i':b?'b-b':'b-m'}">${i?'● พร้อมใช้งาน':b?'● กำลังซัก':'● ปิดซ่อม'}</span></div></div>
+   <div class="sg"><div class="sb">💧<b>${m.s.w}%</b><small>Water</small></div><div class="sb">🌡️<b>${m.s.t}°C</b><small>Temp</small></div><div class="sb">⚙️<b>${m.s.r}</b><small>RPM</small></div></div>
+   ${i?`<div class="row" style="gap:10px"><button class="btn bp" style="flex:3;padding:12px" onclick="A.book('${m.id}')">จองคิวซักผ้า</button><button class="btn bo" style="flex:1;padding:12px" onclick="A.rep('${m.id}')">⚠️</button></div>`
+   :b?`<div class="pr"><div class="pf" style="width:${pg}%"></div></div><div class="row" style="font-size:.85rem;color:var(--p);font-weight:600"><span>🌀 ระบบทำงาน</span><span>เหลือ ${fmt(m.left)}</span></div>`
+   :`<button class="btn bo" disabled style="padding:12px;border-color:var(--dg);color:var(--dg)">ระบบระงับการใช้งานชั่วคราว</button>`}</div>`}).join(''):'<p class="mu" style="text-align:center;margin-top:30px">ไม่พบตู้ตามตัวกรอง</p>';
+ },
+ setFlt(k){this.flt=k;this.rMach()},
+ tick(){
+  let ch=false;
+  this.M.forEach(m=>{if(m.st!=='busy')return;ch=true;m.s.t=Math.max(28,Math.min(48,m.s.t+(Math.random()>.5?1:-1)));m.s.w=Math.min(95,m.s.w+2);m.s.r=800+(Math.random()*450|0);
+   if(--m.left<=0){m.st='idle';m.s={w:0,t:28,r:0};const h=this.hist.find(x=>x.s==='กำลังทำงาน'&&x.m===m.n);if(h){h.d='เพิ่งเสร็จ';h.s='สำเร็จ'}this.toast('✅ '+m.n+' ซักเสร็จแล้ว');this.addNoti('ซักผ้าเสร็จสิ้น!','กรุณาไปรับผ้าที่ '+m.n);this.confetti();this.rHist();this.rAdmin()}});
+  if(ch&&$('s-user').classList.contains('on'))this.rMach();
+ },
+ book(id){this.sel=this.M.find(x=>x.id===id);this.mode=0;this.adds=[];$('bn').textContent=this.sel.n;this.rBook();this.open('sh-book')},
+ total(){return MODES[this.mode].p+this.adds.reduce((s,i)=>s+ADDONS[i].p,0)},
+ rBook(){
+  $('modes').innerHTML=MODES.map((m,i)=>`<div class="li ${this.mode===i?'on':''}" onclick="A.mode=${i};A.rBook()"><div class="row" style="gap:12px"><span style="font-size:1.4rem">${m.e}</span><div><b style="display:block;font-size:.93rem">${m.n}</b><small class="mu">${m.d}</small></div></div><b style="color:var(--p);font-size:1.1rem">฿${m.p}</b></div>`).join('');
+  $('addons').innerHTML=ADDONS.map((a,i)=>`<div class="li ${this.adds.includes(i)?'on':''}" onclick="A.togAdd(${i})"><div class="row" style="gap:12px"><span style="font-size:1.2rem">${a.e}</span><b style="font-size:.88rem">${a.n}</b></div><b style="color:var(--p)">+฿${a.p}</b></div>`).join('');
+  $('bbtn').textContent='ยืนยันชำระเงิน ฿'+this.total();
+ },
+ togAdd(i){const k=this.adds.indexOf(i);k<0?this.adds.push(i):this.adds.splice(k,1);this.rBook()},
+ confirm(){
+  const p=this.total();if(this.u.credit<p){this.close('sh-book');this.toast('เครดิตไม่พอ กรุณาเติมเงินก่อน','error');return setTimeout(()=>this.open('sh-top'),400)}
+  const m=this.sel,sec=MODES[this.mode].s+this.adds.reduce((s,i)=>s+(ADDONS[i].s||0),0);
+  this.u.credit-=p;this.u.washes++;this.u.spent+=p;this.rev+=p;this.week[6]++;
+  m.st='busy';m.left=m.max=sec;m.s={w:45,t:30,r:450};
+  this.hist.unshift({d:'กำลังซัก',m:m.n,p:p,s:'กำลังทำงาน'});
+  this.addNoti('เริ่มซักผ้า','ส่งคำสั่งไปยัง '+m.n+' สำเร็จ ('+fmt(sec)+' นาที)');
+  this.rUser();this.rAdmin();this.close('sh-book');this.toast('เริ่มทำงาน '+m.n);
+ },
+ setAmt(a){this.topAmt=a;$('tin').value='';this.hiAmt()},
+ tIn(){const v=parseInt($('tin').value);this.topAmt=isNaN(v)?0:v;this.hiAmt()},
+ bonus(a){return a>=500?50:a>=300?20:0},
+ hiAmt(){
+  const a=this.topAmt,typed=$('tin').value!=='';
+  document.querySelectorAll('.amt').forEach(e=>e.classList.toggle('on',!typed&&+e.dataset.a===a));
+  const b=this.bonus(a),ok=a>=10&&a<=5000;
+  $('tb').innerHTML=!a?'ระบุจำนวนเงินที่ต้องการเติม':!ok?'⚠️ เติมได้ครั้งละ ฿10 - ฿5,000':`จะได้รับ <b>฿${a+b}</b>${b?` (โบนัส +฿${b} 🎁)`:''}`;
+  $('tbtn').disabled=!ok;
+ },
+ topup(){const a=this.topAmt,b=this.bonus(a);if(a<10||a>5000)return;this.u.credit+=a+b;$('ucr').textContent=this.u.credit.toFixed(2);this.close('sh-top');this.addNoti('เติมเงินสำเร็จ','ยอดเงิน +'+a+(b?' + โบนัส '+b:'')+' บาท เข้าบัญชีแล้ว');this.toast('เติมเงิน ฿'+(a+b)+' สำเร็จ');this.setAmt(100)},
+ chat(t){
+  const i=$('ci'),v=(t||i.value).trim();if(!v)return;const cb=$('cb');
+  cb.insertAdjacentHTML('beforeend',`<div class="mb mus">${esc(v)}</div>`);i.value='';cb.scrollTop=1e9;
+  const R=[[/ราคา|เท่าไหร่/,'ซักด่วน ฿30 · ซักล้ำลึก ฿40 · น้ำยาปรับผ้านุ่ม +฿5 ครับ'],[/กินเงิน|เสีย|ซ่อม/,'ขออภัยครับ กดปุ่ม ⚠️ ที่การ์ดตู้เพื่อแจ้งซ่อม แอดมินจะรีบตรวจสอบครับ'],[/กี่โมง|เปิด|เวลา/,'เปิดให้บริการ 24 ชั่วโมงครับ 🌙']];
+  const r=(R.find(x=>x[0].test(v))||[0,'รับทราบครับ แอดมินได้รับข้อความแล้ว จะรีบตอบกลับโดยเร็วครับ 🤖'])[1];
+  setTimeout(()=>{cb.insertAdjacentHTML('beforeend',`<div class="mb ma">${r}</div>`);cb.scrollTop=1e9},800);
+ },
+ quick(el){this.chat(el.textContent)},
+ rep(id){this.sel=this.M.find(x=>x.id===id);$('rn2').textContent=this.sel.n;$('rd').value='';this.open('sh-rep')},
+ pickTag(el){document.querySelectorAll('#rtags .tag').forEach(t=>t.classList.remove('on'));el.classList.add('on');this.tag=el.textContent},
+ report(){this.reps.unshift({m:this.sel.n,tag:this.tag,d:$('rd').value.trim()||'ไม่มีรายละเอียด',st:'pending',t:'เพิ่งแจ้ง'});this.sel.st='maint';this.rMach();this.rAdmin();this.close('sh-rep');this.toast('ส่งเรื่องแจ้งซ่อมถึงแอดมินแล้ว')},
+ rHist(){
+  $('hsum').textContent=this.hist.length+' รายการ';
+  $('hl').innerHTML=this.hist.map(h=>{const d=h.s==='สำเร็จ';return `<div class="ti ${d?'done':''}"><div class="tc"><div><b style="font-size:.9rem">${h.m}</b><br><small style="color:${d?'var(--mu)':'var(--p)'}">${h.d}</small></div><div style="text-align:right"><b style="color:var(--p);display:block">฿${h.p}</b><small style="color:${d?'var(--ok)':'var(--wr)'}">${h.s}</small></div></div></div>`}).join('');
+ },
+ rProf(){
+  const u=this.u,xp=u.washes*10,lv=Math.floor(xp/50)+1,cur=xp%50;
+  $('pn').textContent=u.name;$('pr').textContent=u.room;$('sc').textContent=u.washes;$('ss').textContent=u.spent;
+  $('lv').textContent='Lv.'+lv+' '+['Rookie','Cleaner','Clean Freak','Laundry Master'][Math.min(3,lv-1)];$('xt').textContent=cur+'/50 XP';$('xb').style.width=cur*2+'%';
+  const mx=Math.max(...this.week,1),D=['จ','อ','พ','พฤ','ศ','ส','อา'];
+  $('chart').innerHTML=this.week.map((v,i)=>`<div><i style="height:${v/mx*100}%"></i>${D[i]}</div>`).join('');
+  const B=[['🌙','Night Owl','ซักหลังเที่ยงคืน',1],['🔥','Clean Freak','ซัก 3 ครั้ง/สัปดาห์',1],['💎','Rich Kid','เติมเงินสะสม 1,000฿',u.credit>=1000],['🐞','Bug Hunter','แจ้งซ่อมสำเร็จ 1 ครั้ง',this.reps.some(r=>r.st==='resolved')],['🏆','Veteran','ซักครบ 20 ครั้ง',u.washes>=20],['👑','Level 5','ถึงเลเวล 5',lv>=5]];
+  $('ach').innerHTML=B.map(b=>`<div class="ab ${b[3]?'on':''}"><span>${b[0]}</span><div><b style="font-size:.82rem;display:block">${b[1]}</b><small class="mu" style="font-size:.64rem">${b[2]}</small></div></div>`).join('');
+ },
+ editP(){$('en').value=this.u.name;$('er').value=this.u.room;this.open('sh-edit')},
+ saveP(){this.u.name=$('en').value.trim()||this.u.name;this.u.room=$('er').value.trim()||this.u.room;this.rUser();this.close('sh-edit');this.toast('อัปเดตข้อมูลส่วนตัวสำเร็จ')},
+ bellOn(){$('bell').classList.toggle('has',this.noti.length>0)},
+ addNoti(t,d){this.noti.unshift({t,d,tm:'เมื่อสักครู่'});$('bell').classList.add('has');this.rNoti()},
+ rNoti(){$('nl').innerHTML=this.noti.map(n=>`<div class="ni2"><b>💬</b><div><b style="font-size:.9rem">${n.t}</b><p class="mu" style="font-size:.78rem;margin:2px 0">${n.d}</p><small style="color:var(--p)">${n.tm}</small></div></div>`).join('')},
+ rAdmin(){
+  $('rev').textContent=this.rev.toLocaleString();
+  $('alist').innerHTML=this.M.map(m=>{const br=m.st==='maint',lb=m.st==='busy';return `<div class="mc row" style="padding:14px"><div class="row" style="gap:12px"><div class="mi" style="width:46px;height:46px;transform:scale(.85)">${m.t==='d'?'🌬️':washer('var(--p)')}</div><div><b style="font-size:.92rem">${m.n}</b><br><small style="color:${br?'var(--dg)':lb?'var(--p)':'var(--ok)'}">${br?'ปิดซ่อมบำรุง':lb?'กำลังทำงาน '+fmt(m.left):'ปกติ (Idle)'}</small></div></div><button class="btn bo" ${lb?'disabled':''} style="width:auto;padding:8px 14px;font-size:.8rem;color:${br?'var(--ok)':'var(--p)'}" onclick="A.toggleM('${m.id}')">${br?'เปิดใช้งาน':'ระงับตู้'}</button></div>`}).join('');
+  $('vlist').innerHTML=this.vis.map(v=>`<div class="vc"><div class="row" style="gap:10px"><div class="mi" style="width:44px;height:44px;border-radius:50%">🛡️</div><div><b style="font-size:.9rem;display:block">${esc(v.n)}</b><small class="mu">${v.r} · IP ${v.ip}</small></div></div><small style="color:var(--p);white-space:nowrap">${v.tm}</small></div>`).join('');
+  $('rlist').innerHTML=this.reps.length?this.reps.map((r,i)=>{const P=r.st==='pending',R=r.st==='resolving';return `<div class="mc" style="padding:16px;border-left:4px solid ${P?'var(--wr)':R?'var(--p)':'var(--ok)'};${r.st==='resolved'?'opacity:.6':''}"><div class="row" style="margin-bottom:8px"><b style="font-size:.92rem">${r.m}</b><small class="mu">${r.t}</small></div><div style="background:rgba(0,0,0,.4);padding:10px;border-radius:12px;margin-bottom:12px"><span class="tag" style="padding:2px 9px;font-size:.72rem">${esc(r.tag)}</span><p class="mu" style="font-size:.82rem;margin-top:6px">"${esc(r.d)}"</p></div><div class="row"><b style="font-size:.78rem;color:${P?'var(--wr)':R?'var(--p)':'var(--ok)'}">${P?'รอดำเนินการ':R?'กำลังซ่อมแซม':'แก้ไขแล้ว'}</b>${r.st==='resolved'?'<small class="mu">✔✔ ปิดงาน</small>':`<button class="btn ${P?'bo':'bp'}" style="width:auto;padding:8px 14px;font-size:.8rem" onclick="A.repSt(${i},'${P?'resolving':'resolved'}')">${P?'🔨 รับเรื่องซ่อม':'✔ ซ่อมเสร็จแล้ว'}</button>`}</div></div>`}).join(''):'<p class="mu" style="text-align:center;margin-top:30px">ไม่มีรายการแจ้งซ่อม</p>';
+ },
+ toggleM(id){const m=this.M.find(x=>x.id===id);m.st=m.st==='maint'?'idle':'maint';this.rAdmin();this.rMach();this.toast('อัปเดตสถานะ '+m.n+' เรียบร้อย')},
+ repSt(i,s){const r=this.reps[i];r.st=s;if(s==='resolved'){const m=this.M.find(x=>x.n===r.m);if(m&&m.st==='maint')m.st='idle';this.toast('ซ่อม '+r.m+' เรียบร้อยแล้ว')}else this.toast('รับเรื่องแจ้งซ่อมเรียบร้อย');this.rAdmin();this.rMach();this.rProf()},
+ open(id){$(id).classList.add('on');if(id==='sh-noti')$('bell').classList.remove('has');if(id==='sh-top')this.hiAmt()},
+ close(id){$(id).classList.remove('on')},
+ ovc(e,id){if(e.target.id===id)this.close(id)},
+ confetti(){const c=$('cfx');for(let i=0;i<24;i++){const e=document.createElement('i');e.textContent=['🫧','✨','💙','🧼'][i%4];e.style.left=Math.random()*100+'%';e.style.animationDelay=Math.random()*.6+'s';e.style.fontSize=14+Math.random()*14+'px';c.appendChild(e);setTimeout(()=>e.remove(),2600)}},
+ toast(m,t){const e=document.createElement('div');e.className='toast';e.innerHTML=(t==='error'?'⚠️':'✅')+' <span>'+m+'</span>';$('toast').appendChild(e);setTimeout(()=>{e.style.opacity='0';setTimeout(()=>e.remove(),400)},2500)}
+};
+A.init();
 </script>
 </body>
 </html>
