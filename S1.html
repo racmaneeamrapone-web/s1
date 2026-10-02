@@ -1,34 +1,35 @@
 <!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>WashMate v4</title>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--p:#00e5ff;--pd:#0891b2;--on:#02181d;--bg:#050810;--cd:#101a2e;--tx:#f1f5f9;--mu:#8a9ab5;--ok:#10b981;--wr:#f59e0b;--dg:#ef4444;--bd:rgba(255,255,255,.09);--gl:rgba(0,229,255,.3);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-body.ad{--p:#4f46e5;--pd:#3730a3;--on:#fff;--bg:#eef2f7;--cd:#fff;--tx:#0f172a;--mu:#64748b;--bd:#e2e8f0;--gl:rgba(79,70,229,.25)}
+:root{--p:#0ea5e9;--pd:#0369a1;--on:#fff;--bg:#e8f5fc;--cd:#ffffff;--tx:#0f2a3a;--mu:#64809a;--ok:#059669;--wr:#b45309;--dg:#dc2626;--bd:rgba(15,42,58,.1);--gl:rgba(14,165,233,.28);--sh:rgba(3,105,161,.45);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body.ad{--sh:rgba(55,48,163,.45);--p:#4f46e5;--pd:#3730a3;--on:#fff;--bg:#eef2f7;--cd:#fff;--tx:#0f172a;--mu:#64748b;--bd:#e2e8f0;--gl:rgba(79,70,229,.25)}
 html,body{height:100%}*{margin:0;padding:0;box-sizing:border-box;font-family:'Prompt',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--tx);overflow:hidden;transition:background .4s}
 .scr{display:none;height:100%;justify-content:center}.scr.on{display:flex}
 .app{width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;position:relative;box-shadow:0 0 60px var(--gl);background:radial-gradient(circle at 80% -10%,var(--gl),transparent 45%),var(--bg)}
 .adm{width:100%;max-width:1000px;height:100%;display:flex;flex-direction:column}
 .bdy{flex:1;overflow-y:auto;padding:16px 16px 100px}.adm .bdy{padding:18px}
-.hd{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);background:rgba(10,16,30,.8);backdrop-filter:blur(14px)}
+.hd{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);background:rgba(255,255,255,.62);backdrop-filter:blur(16px);box-shadow:0 6px 20px rgba(3,105,161,.08)}
 .ah{padding:16px 20px;background:var(--pd);color:#fff;display:flex;justify-content:space-between;align-items:center}
 .tabs{display:flex;gap:6px;padding:10px 14px;overflow-x:auto;background:var(--cd);border-bottom:1px solid var(--bd);scrollbar-width:none}
 .tb{padding:9px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;color:var(--mu);white-space:nowrap;font-weight:500;transition:.15s}.tb:active{transform:translateY(2px)}
 .tb.on{background:var(--p);color:#fff;box-shadow:0 3px 0 var(--pd)}
 .btn{width:100%;padding:13px;border:0;border-radius:14px;font-size:.95rem;font-weight:600;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;position:relative;overflow:hidden;transition:transform .08s,box-shadow .08s,filter .2s;color:var(--tx);background:none}
 .btn:hover{filter:brightness(1.1)}.btn:active{transform:translateY(4px)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.bp{background:linear-gradient(180deg,var(--p),var(--pd));color:var(--on);box-shadow:0 5px 0 rgba(0,0,0,.4),0 12px 22px var(--gl)}.bp:active{box-shadow:0 1px 0 rgba(0,0,0,.4)}
+.bp{background:linear-gradient(180deg,var(--p),var(--pd));color:var(--on);box-shadow:0 5px 0 var(--sh),0 12px 22px var(--gl),inset 0 2px 0 rgba(255,255,255,.4)}.bp:active{box-shadow:0 1px 0 var(--sh),inset 0 3px 8px rgba(0,0,0,.25)}
 .bo{background:var(--cd);border:1px solid var(--bd);box-shadow:0 4px 0 var(--bd)}.bo:active{box-shadow:0 0 0 var(--bd)}
 .bx{background:var(--dg);color:#fff;box-shadow:0 5px 0 #9b1c1c}.bx:active{box-shadow:0 1px 0 #9b1c1c}
 .bs{width:auto;padding:8px 13px;font-size:.78rem;border-radius:11px}.bs:active{transform:translateY(2px)}.bs.bp,.bs.bo,.bs.bx{box-shadow:0 3px 0 rgba(0,0,0,.3)}
 .rp{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rpl .6s ease-out;pointer-events:none;width:20px;height:20px;margin:-10px}@keyframes rpl{to{transform:scale(10);opacity:0}}
-.cd{background:var(--cd);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 6px 0 rgba(0,0,0,.2),0 14px 26px rgba(0,0,0,.2);transition:transform .2s}
+.cd{background:var(--cd);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 12px 30px rgba(3,105,161,.13),inset 0 2px 0 #fff;transition:transform .2s}
 .app .cd:hover{transform:translateY(-2px)}.cd.run{border-color:var(--p);box-shadow:0 0 24px var(--gl)}
 body.ad .cd{box-shadow:0 1px 2px rgba(15,23,42,.06),0 6px 16px rgba(15,23,42,.06)}
 .inp{width:100%;padding:13px 14px;border-radius:13px;border:1px solid var(--bd);background:rgba(127,127,127,.1);color:var(--tx);outline:0;font-size:.92rem;margin-bottom:10px}.inp:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--gl)}
 .lb{font-size:.74rem;color:var(--mu);margin:0 0 4px 2px;display:block}
 .row{display:flex;justify-content:space-between;align-items:center}.mu{color:var(--mu)}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.g .cd{margin:0}
 h3.t{font-size:.95rem;color:var(--mu);margin:6px 0 10px}
-#s-auth{overflow-y:auto;-webkit-overflow-scrolling:touch}.au{width:100%;max-width:440px;margin:auto;padding:20px 20px 48px}.ac{background:rgba(16,26,46,.9);border:1px solid var(--bd);border-radius:28px;padding:26px 22px;box-shadow:0 20px 40px rgba(0,0,0,.6)}
+#s-auth{overflow-y:auto;-webkit-overflow-scrolling:touch}.au{width:100%;max-width:440px;margin:auto;padding:20px 20px 48px}.ac{background:rgba(255,255,255,.7);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.9);border-radius:28px;padding:26px 22px;box-shadow:0 24px 50px rgba(3,105,161,.18),inset 0 2px 0 #fff}
+.door{width:84px;height:84px;margin:0 auto 10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#bfe6f7 45%,#5db8e6);border:7px solid #e8f1f6;box-shadow:0 8px 20px rgba(3,105,161,.3),inset 0 0 18px rgba(3,105,161,.35)}.door i{display:block;width:100%;height:100%;border-radius:50%;background:conic-gradient(transparent 0 70%,rgba(255,255,255,.75) 80%,transparent 90%);animation:dsp 4s linear infinite}@keyframes dsp{to{transform:rotate(360deg)}}.cd.run .mi{animation:wob .5s infinite alternate}@keyframes wob{to{transform:translate(1.5px,-1.5px) rotate(2deg)}}
 .fm{display:none}.fm.on{display:block}.lk{color:var(--p);cursor:pointer;font-size:.85rem;font-weight:500}
 .hint{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--wr);padding:9px 12px;border-radius:12px;font-size:.78rem;margin-bottom:12px}
 .mi{width:60px;height:60px;border-radius:16px;background:rgba(127,127,127,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
@@ -40,7 +41,7 @@ h3.t{font-size:.95rem;color:var(--mu);margin:6px 0 10px}
 .st{padding:16px;text-align:left}.st b{font-size:1.7rem}
 .how{display:flex;gap:6px;font-size:.72rem;text-align:center;margin-bottom:14px}.how div{flex:1;background:var(--gl);padding:9px 4px;border-radius:12px}
 .ann{background:linear-gradient(135deg,var(--gl),transparent);border:1px solid var(--p);border-radius:16px;padding:12px 14px;font-size:.82rem;margin-bottom:14px}
-.nav{position:absolute;bottom:0;left:0;right:0;background:rgba(5,8,16,.94);backdrop-filter:blur(20px);border-top:1px solid var(--bd);display:flex;justify-content:space-around;padding:10px 6px calc(12px + env(safe-area-inset-bottom,0px));z-index:50}
+.nav{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.8);box-shadow:0 -8px 24px rgba(3,105,161,.1);backdrop-filter:blur(20px);border-top:1px solid var(--bd);display:flex;justify-content:space-around;padding:10px 6px calc(12px + env(safe-area-inset-bottom,0px));z-index:50}
 .ni{display:flex;flex-direction:column;align-items:center;color:var(--mu);cursor:pointer;width:70px;font-size:.66rem;transition:.2s}.ni b{font-size:1.3rem;filter:grayscale(1);transition:.2s}.ni:active{transform:translateY(3px)}.ni.on{color:var(--p)}.ni.on b{filter:none;transform:translateY(-3px) scale(1.15)}
 .view{display:none}.view.on{display:block;animation:up .35s cubic-bezier(.16,1,.3,1)}@keyframes up{from{opacity:0;transform:translateY(14px)}}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:.3s;z-index:2000;display:flex;align-items:flex-end;justify-content:center}.ov.on{opacity:1;pointer-events:auto}
@@ -66,7 +67,7 @@ body.ad .ov{align-items:center}body.ad .sheet{border-radius:24px;border:1px soli
 
 <!-- AUTH -->
 <div class="scr on" id="s-auth"><div class="au"><div class="ac">
-<div style="text-align:center;font-size:3rem">🫧</div><h1 style="text-align:center;color:var(--p);font-size:1.9rem">WashMate</h1><p class="mu" style="text-align:center;font-size:.82rem;margin:2px 0 18px">ระบบซักผ้าหยอดเหรียญออนไลน์ v4</p>
+<div class="door"><i></i></div><h1 style="text-align:center;color:var(--p);font-size:1.9rem">WashMate</h1><p class="mu" style="text-align:center;font-size:.82rem;margin:2px 0 18px">ระบบซักผ้าหยอดเหรียญออนไลน์ v4</p>
 <div class="fm on" id="f-login"><div class="hint">🔐 ต้อง <b>สมัครสมาชิกก่อน</b> จึงจะเข้าใช้งานได้</div>
 <span class="lb">ชื่อผู้ใช้</span><input class="inp" id="lu" placeholder="Username" autocomplete="username"><span class="lb">รหัสผ่าน</span><input class="inp" id="lp" type="password" placeholder="รหัสผ่าน" onkeydown="if(event.key==='Enter')A.login()">
 <button class="btn bp" onclick="A.login()">เข้าสู่ระบบ</button>
@@ -124,15 +125,16 @@ body.ad .ov{align-items:center}body.ad .sheet{border-radius:24px;border:1px soli
 const $=i=>document.getElementById(i),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const hs=s=>{let h=5381;for(const c of s)h=(h*33^c.charCodeAt(0))>>>0;return''+h};
 const fmt=s=>Math.floor(s/60)+':'+String(Math.max(0,s)%60).padStart(2,'0');
-const day=(o=0)=>new Date(Date.now()-o*864e5).toISOString().slice(0,10);
+const dk=t=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};const day=(o=0)=>dk(Date.now()-o*864e5);
 const tm=t=>new Date(t).toLocaleString('th-TH',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
 const AD=[{n:'น้ำยาปรับผ้านุ่ม',p:5,e:'🌸'},{n:'ล้างน้ำเพิ่ม 1 รอบ',p:10,e:'💦',s:20}];
 const TAGS=['ระบบน้ำขัดข้อง/น้ำรั่ว','เครื่องกินเงิน','ฝาตู้ปิดไม่สนิท','เครื่องไม่ปั่นหมาด','อื่นๆ'];
 const AMTS=[[50,0],[100,0],[300,20],[500,50]];
 const PROMO={WASH10:t=>Math.round(t*.1),FIRST:(t,u)=>u.washes?0:10};
 const seed=()=>({users:{},adm:{u:'admin',pw:hs('admin1234')},M:[{id:'M1',n:'เครื่องฝาหน้า No.1',t:'w',st:'idle',w:[]},{id:'M2',n:'เครื่องฝาบน No.2',t:'w',st:'idle',w:[]},{id:'M3',n:'ตู้อบผ้า No.3',t:'d',st:'idle',w:[]}],pr:{w:[30,40],d:[15,25]},reps:[],msgs:[],logs:[],rv:{},ann:'ยินดีต้อนรับสู่ WashMate 🎉 ใช้โค้ด FIRST ลด ฿10 สำหรับการซักครั้งแรก',s:null});
-let D=null;try{D=JSON.parse(localStorage.getItem('wm4'))}catch(e){}if(!D)D=seed();
+let D=null;try{D=JSON.parse(localStorage.getItem('wm4'))}catch(e){}D=Object.assign(seed(),D&&typeof D==='object'?D:{});
 const save=()=>{try{localStorage.setItem('wm4',JSON.stringify(D))}catch(e){}};
+const ss=v=>{try{v?sessionStorage.setItem('wm4s',JSON.stringify(v)):sessionStorage.removeItem('wm4s')}catch(e){}};
 const modes=t=>(t==='d'?[['อบเร็ว','1 นาที',60,'🔥'],['อบแห้งนุ่ม','2 นาที',120,'☀️']]:[['ซักด่วน','1 นาที',60,'⚡'],['ซักล้ำลึก','2 นาที',120,'👕']]).map((m,i)=>({n:m[0],d:m[1],s:m[2],e:m[3],p:D.pr[t][i]}));
 let S=null,cur=null,mode=0,adds=[],promo='',flt='all',topAmt=100,hv='w',at='dash',tag=TAGS[0],q='';
 const U=()=>D.users[S.u];
@@ -140,7 +142,7 @@ const A={
 init(){document.addEventListener('pointerdown',e=>{const b=e.target.closest('.btn');if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement('span');s.className='rp';s.style.left=e.clientX-r.left+'px';s.style.top=e.clientY-r.top+'px';b.appendChild(s);setTimeout(()=>s.remove(),600)});
  $('amts').innerHTML=AMTS.map(([a,b])=>`<div class="amt" data-a="${a}" onclick="A.setAmt(${a})">${a}<small>${b?'+'+b+' โบนัส':'&nbsp;'}</small></div>`).join('');
  $('rtags').innerHTML=TAGS.map((t,i)=>`<div class="tag ${i?'':'on'}" onclick="A.pickTag(this)">${t}</div>`).join('');
- this.setAmt(100);if(D.s&&(D.s.r==='admin'||(D.users[D.s.u]&&!D.users[D.s.u].ban))){S=D.s;this.show()}setInterval(()=>this.tick(),1000)},
+ this.setAmt(100);let s=null;try{s=JSON.parse(sessionStorage.getItem('wm4s'))}catch(e){}if(s&&(s.r==='admin'||(D.users[s.u]&&!D.users[s.u].ban))){S=s;this.show()}setInterval(()=>this.tick(),1000)},
 go(f){document.querySelectorAll('.fm').forEach(e=>e.classList.remove('on'));$('f-'+f).classList.add('on')},
 login(){const u=$('lu').value.trim().toLowerCase(),x=D.users[u];if(!u||!$('lp').value)return this.toast('กรอก Username และรหัสผ่าน','e');
  if(!x){this.toast('ยังไม่มีบัญชีนี้ กรุณาสมัครสมาชิกก่อน','e');return this.go('reg')}
@@ -150,19 +152,19 @@ reg(){const g=i=>$(i).value.trim(),n=g('rn'),u=g('ru').toLowerCase(),ph=g('rph')
  if(!n||!r)return this.toast('กรอกชื่อและเลขห้อง','e');if(!/^[a-z0-9_.]{3,20}$/.test(u))return this.toast('Username ไม่ถูกต้อง','e');if(D.users[u])return this.toast('Username นี้ถูกใช้แล้ว','e');
  if(!/^\d{9,10}$/.test(ph))return this.toast('เบอร์โทรต้องเป็นตัวเลข 9-10 หลัก','e');if(p.length<6)return this.toast('รหัสผ่านอย่างน้อย 6 ตัว','e');if(p!==$('rp2').value)return this.toast('รหัสผ่านไม่ตรงกัน','e');
  D.users[u]={n,r,ph,pw:hs(p),cr:20,washes:0,spent:0,ban:0,h:[],tx:[{t:'เครดิตต้อนรับ',a:20,ts:Date.now()}],no:[{t:'ยินดีต้อนรับ 🎉',d:'รับเครดิตต้อนรับ ฿20 แล้ว',ts:Date.now()}],rep:0,top:0};
- this.lg('สมาชิกใหม่: '+n+' (@'+u+')');save();this.toast('สมัครสำเร็จ! เข้าสู่ระบบได้เลย');$('lu').value=u;$('lp').value='';this.go('login')},
+ this.lg('สมาชิกใหม่: '+n+' (@'+u+')');save();['rn','ru','rph','rr','rp','rp2'].forEach(i=>$(i).value='');this.toast('สมัครสำเร็จ! กำลังเข้าสู่ระบบให้อัตโนมัติ');this.enter({u,r:'user'})},
 forgot(){const u=$('fu').value.trim().toLowerCase(),x=D.users[u],p=$('fp').value;if(!x||x.ph!==$('fph').value.trim())return this.toast('Username หรือเบอร์โทรไม่ตรงกับที่ลงทะเบียน','e');
  if(p.length<6)return this.toast('รหัสผ่านใหม่อย่างน้อย 6 ตัว','e');x.pw=hs(p);save();this.toast('ตั้งรหัสผ่านใหม่สำเร็จ');$('lu').value=u;this.go('login')},
-enter(s){S=s;D.s=s;save();$('tt').textContent=s.r==='admin'?'เข้าสู่ระบบผู้ดูแล...':'กำลังโหลดข้อมูลของคุณ...';$('trans').classList.add('on');setTimeout(()=>{this.show();$('trans').classList.remove('on');this.toast('เข้าสู่ระบบสำเร็จ')},700)},
+enter(s){S=s;ss(s);$('tt').textContent=s.r==='admin'?'เข้าสู่ระบบผู้ดูแล...':'กำลังโหลดข้อมูลของคุณ...';$('trans').classList.add('on');setTimeout(()=>{this.show();$('trans').classList.remove('on');this.toast('เข้าสู่ระบบสำเร็จ')},700)},
 show(){document.body.classList.toggle('ad',S.r==='admin');document.querySelectorAll('.scr').forEach(e=>e.classList.remove('on'));
  if(S.r==='admin'){$('s-admin').classList.add('on');at='dash';this.rAdm()}else{$('s-user').classList.add('on');this.rUser()}},
-logout(){$('tt').textContent='กำลังออกจากระบบ...';$('trans').classList.add('on');S=null;D.s=null;save();setTimeout(()=>{document.body.classList.remove('ad');document.querySelectorAll('.scr').forEach(e=>e.classList.remove('on'));$('s-auth').classList.add('on');$('lp').value='';$('sp').value='';this.go('login');$('trans').classList.remove('on')},500)},
+logout(){$('tt').textContent='กำลังออกจากระบบ...';$('trans').classList.add('on');S=null;ss(null);setTimeout(()=>{document.body.classList.remove('ad');document.querySelectorAll('.scr').forEach(e=>e.classList.remove('on'));$('s-auth').classList.add('on');$('lp').value='';$('sp').value='';this.go('login');$('trans').classList.remove('on')},500)},
 lg(t){D.logs.unshift({t,ts:Date.now()});D.logs=D.logs.slice(0,40)},
 nt(u,t,d){const x=D.users[u];if(x)x.no.unshift({t,d,ts:Date.now(),r:0})},
 rAll(){if(!S)return;S.r==='admin'?this.rAdm():this.rUser()},
 // ---------- USER ----------
 tab(t,el){document.querySelectorAll('#s-user .view').forEach(v=>v.classList.remove('on'));document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));$('v-'+t).classList.add('on');el.classList.add('on');this.rUser()},
-rUser(){const u=U();$('uname').textContent=u.n.split(' ')[0];$('ucr').textContent=u.cr.toFixed(0);$('bell').classList.toggle('has',u.no.some(n=>!n.r));
+rUser(){const u=U();if(!u||u.ban){S=null;ss(null);return this.logout()}$('uname').textContent=u.n.split(' ')[0];$('ucr').textContent=u.cr.toFixed(0);$('bell').classList.toggle('has',u.no.some(n=>!n.r));
  $('ann').innerHTML=D.ann?`<div class="ann">📢 ${esc(D.ann)}</div>`:'';
  $('howto').innerHTML=u.washes?'':'<div class="how"><div>① เลือกตู้ที่ว่าง</div><div>② เลือกโปรแกรม</div><div>③ จ่ายด้วยเครดิต<br>แล้วรอแจ้งเตือน</div></div>';
  this.rMach();this.rHist();this.rChat();this.rProf()},
@@ -189,7 +191,7 @@ pay(){const m=cur,u=U();if(m.st!=='idle'){this.close('sh-book');return this.toas
  const sec=md.s+(m.t==='w'?adds.reduce((a,i)=>a+(AD[i].s||0),0):0),id='H'+Date.now();
  u.cr-=tot;u.washes++;u.spent+=tot;D.rv[day()]=(D.rv[day()]||0)+tot;u.h.unshift({id,m:m.n,p:tot,ts:Date.now(),st:'run'});u.tx.unshift({t:'ชำระ '+m.n,a:-tot,ts:Date.now()});
  Object.assign(m,{st:'busy',max:sec,end:Date.now()+sec*1000,by:S.u,hid:id,paid:tot,w:[]});this.lg(u.n+' ใช้ '+m.n+' ฿'+tot);save();this.close('sh-book');this.rUser();this.toast('เริ่มทำงาน '+m.n+' ('+fmt(sec)+' นาที)')},
-tick(){if(!S)return;const now=Date.now();let ch=0;D.M.forEach(m=>{if(m.st!=='busy')return;const l=Math.ceil((m.end-now)/1000);if(l<=0){this.fin(m);ch=1;return}
+tick(){const now=Date.now();let ch=0;D.M.forEach(m=>{if(m.st!=='busy')return;const l=Math.ceil((m.end-now)/1000);if(l<=0){this.fin(m);ch=1;return}
  const e=(f,v)=>{const x=$(f+m.id);if(x)x.textContent=v},p=1-l/m.max;e('tl',fmt(l));e('al',fmt(l));const b=$('pf'+m.id);if(b)b.style.width=p*100+'%';e('w',Math.min(95,40+Math.round(p*55))+'%');e('t',(30+Math.random()*8|0)+'°C');e('r',m.t==='d'?'—':800+(Math.random()*400|0))});if(ch)this.rAll()},
 fin(m){m.st='idle';const u=D.users[m.by];if(u){const h=u.h.find(x=>x.id===m.hid);if(h)h.st='done';this.nt(m.by,'เสร็จแล้ว ✅','กรุณามารับผ้าที่ '+m.n)}(m.w||[]).forEach(x=>this.nt(x,'ตู้ว่างแล้ว 🔔',m.n+' พร้อมให้ใช้งาน'));m.w=[];this.lg(m.n+' ทำงานเสร็จ');save();
  if(S&&S.u===m.by){this.toast('✅ '+m.n+' เสร็จแล้ว');this.confetti()}},
@@ -208,7 +210,7 @@ chat(t){const i=$('ci'),v=(t||i.value).trim();if(!v)return;i.value='';D.msgs.pus
 rChat(){const m=D.msgs.filter(x=>x.u===S.u);$('cb').innerHTML=`<div class="mb ma">สวัสดีครับ 🤖 พิมพ์ถามหรือเลือกหัวข้อด้านล่างได้เลย</div>`+m.map(x=>`<div class="mb ${x.f==='u'?'mus':'ma'}">${x.f==='a'?'<small style="color:var(--p)">👨‍💼 แอดมิน</small><br>':''}${esc(x.t)}</div>`).join('');$('cb').scrollTop=1e9},
 rProf(){const u=U(),xp=u.washes*10,lv=Math.floor(xp/50)+1,cu=xp%50;$('pn').textContent=u.n;$('pr').textContent=u.r;$('pph').textContent=u.ph;$('sc').textContent=u.washes;$('ss').textContent=u.spent;
  $('lv').textContent='Lv.'+lv+' '+['Rookie','Cleaner','Clean Freak','Laundry Master'][Math.min(3,lv-1)];$('xt').textContent=cu+'/50 XP';$('xb').style.width=cu*2+'%';
- const cnt=[6,5,4,3,2,1,0].map(o=>u.h.filter(h=>new Date(h.ts).toISOString().slice(0,10)===day(o)).length),mx=Math.max(...cnt,1);
+ const cnt=[6,5,4,3,2,1,0].map(o=>u.h.filter(h=>dk(h.ts)===day(o)).length),mx=Math.max(...cnt,1);
  $('chart').innerHTML=cnt.map((v,i)=>`<div><small style="color:var(--tx)">${v||''}</small><i style="height:${v/mx*75}%"></i>${i===6?'วันนี้':day(6-i).slice(8)}</div>`).join('');
  const B=[['🌱','ครั้งแรก','ใช้งานครั้งแรก',u.washes>=1],['🔥','Clean Freak','ใช้งาน 5 ครั้ง',u.washes>=5],['🌙','Night Owl','ใช้งานหลังเที่ยงคืน',u.h.some(h=>new Date(h.ts).getHours()<5)],['💎','Rich Kid','เติมเงินสะสม 1,000฿',u.top>=1000],['🐞','Bug Hunter','แจ้งซ่อม 1 ครั้ง',u.rep>=1],['🏆','Veteran','ใช้งาน 20 ครั้ง',u.washes>=20]];
  $('ach').innerHTML=B.map(b=>`<div class="ab ${b[3]?'on':''}"><span style="font-size:1.4rem">${b[0]}</span><div><b style="font-size:.8rem;display:block">${b[1]}</b><small class="mu" style="font-size:.62rem">${b[2]}</small></div></div>`).join('')},
@@ -218,7 +220,7 @@ saveP(){const u=U(),p=$('ep').value,ph=$('eph').value.trim();if(!/^\d{9,10}$/.te
 openN(){const u=U();$('nl').innerHTML=u.no.map(n=>`<div class="rrow"><div><b style="font-size:.88rem">${esc(n.t)}</b><p class="mu" style="font-size:.78rem">${esc(n.d)}</p></div><small style="color:var(--p);white-space:nowrap">${tm(n.ts)}</small></div>`).join('')||'<p class="mu">ไม่มีการแจ้งเตือน</p>';u.no.forEach(n=>n.r=1);save();$('bell').classList.remove('has');this.open('sh-noti')},
 // ---------- ADMIN ----------
 rAdm(){const T=[['dash','📊 ภาพรวม'],['mach','🧺 ตู้ซัก'],['usr','👥 สมาชิก'],['rep','⚠️ แจ้งซ่อม'],['msg','💬 ข้อความ'],['set','⚙️ ตั้งค่า']],pn=D.reps.filter(r=>r.st!=='resolved').length;
- $('atabs').innerHTML=T.map(([k,l])=>`<div class="tb ${at===k?'on':''}" onclick="at='${k}';A.rAdm()">${l}${k==='rep'&&pn?' ('+pn+')':''}</div>`).join('');$('abody').innerHTML=this['a_'+at]();if(at==='usr')this.uList()},
+ $('atabs').innerHTML=T.map(([k,l])=>`<div class="tb ${at===k?'on':''}" onclick="at='${k}';A.rAdm()">${l}${k==='rep'&&pn?' ('+pn+')':''}</div>`).join('');$('abody').innerHTML=this['a_'+at]()||'<div class="hint">โหลดส่วนนี้ไม่สำเร็จ ลองสลับแท็บอีกครั้ง</div>';if(at==='usr')this.uList()},
 a_dash(){const rv=D.rv,tot=Object.values(rv).reduce((a,b)=>a+b,0),bz=D.M.filter(m=>m.st==='busy').length,d=[6,5,4,3,2,1,0].map(o=>rv[day(o)]||0),mx=Math.max(...d,1),pn=D.reps.filter(r=>r.st!=='resolved').length;
  return `<div class="g" style="margin-bottom:14px"><div class="st"><small>💰 รายได้วันนี้</small><b>฿${rv[day()]||0}</b></div><div class="st"><small>🏦 รายได้รวม</small><b>฿${tot}</b></div><div class="st"><small>👥 สมาชิกทั้งหมด</small><b>${Object.keys(D.users).length}</b></div><div class="st"><small>🧺 ตู้กำลังทำงาน</small><b>${bz}/${D.M.length}</b></div></div>
  ${pn?`<div class="hint" style="cursor:pointer" onclick="at='rep';A.rAdm()">⚠️ มีเรื่องแจ้งซ่อมรอดำเนินการ ${pn} รายการ — กดเพื่อดู</div>`:''}
@@ -229,14 +231,15 @@ a_mach(){return `<div class="row" style="margin-bottom:14px"><h3 class="t" style
  ${b?`<p style="font-size:.82rem;margin:10px 0">ผู้ใช้: <b>${esc(D.users[m.by]?D.users[m.by].n:'-')}</b> · เหลือ <b id="al${m.id}">${fmt(l)}</b></p>`:'<div style="height:10px"></div>'}
  <div class="row" style="gap:8px;justify-content:flex-start;flex-wrap:wrap"><button class="btn bo bs" ${b?'disabled':''} onclick="A.togM('${m.id}')">${x?'✅ เปิดใช้งาน':'⛔ ระงับตู้'}</button>${b?`<button class="btn bx bs" onclick="A.stopM('${m.id}')">⏹ หยุด+คืนเงิน</button>`:''}<button class="btn bo bs" ${b?'disabled':''} onclick="A.delM('${m.id}')">🗑️</button></div></div>`}).join('')+'</div>'},
 togM(id){const m=D.M.find(x=>x.id===id);m.st=m.st==='maint'?'idle':'maint';this.lg('แอดมินเปลี่ยนสถานะ '+m.n);save();this.rAdm()},
-stopM(id){const m=D.M.find(x=>x.id===id),u=D.users[m.by];if(u){u.cr+=m.paid;u.tx.unshift({t:'คืนเงิน '+m.n,a:m.paid,ts:Date.now()});const h=u.h.find(x=>x.id===m.hid);if(h)h.st='ref';this.nt(m.by,'คืนเงินแล้ว','แอดมินหยุด '+m.n+' และคืนเงิน ฿'+m.paid)}D.rv[day()]=Math.max(0,(D.rv[day()]||0)-m.paid);m.st='idle';this.lg('หยุด '+m.n+' และคืนเงิน ฿'+m.paid);save();this.rAdm();this.toast('คืนเงินเรียบร้อย')},
-delM(id){D.M=D.M.filter(x=>x.id!==id);save();this.rAdm()},
-addM(){this.ask('ชื่อตู้ใหม่ (ขึ้นต้น "ตู้อบ" = ตู้อบผ้า)','เช่น เครื่องฝาหน้า No.4',v=>{D.M.push({id:'M'+Date.now(),n:v,t:/อบ/.test(v)?'d':'w',st:'idle',w:[]});this.lg('เพิ่มตู้ '+v);save();this.rAdm()})},
+stopM(id){this.conf('หยุดตู้และคืนเงินให้ลูกค้า?',()=>this.doStop(id))},
+doStop(id){const m=D.M.find(x=>x.id===id);if(!m||m.st!=='busy')return;const u=D.users[m.by];if(u){u.cr+=m.paid;u.tx.unshift({t:'คืนเงิน '+m.n,a:m.paid,ts:Date.now()});const h=u.h.find(x=>x.id===m.hid);if(h)h.st='ref';this.nt(m.by,'คืนเงินแล้ว','แอดมินหยุด '+m.n+' และคืนเงิน ฿'+m.paid)}D.rv[day()]=Math.max(0,(D.rv[day()]||0)-m.paid);m.st='idle';this.lg('หยุด '+m.n+' และคืนเงิน ฿'+m.paid);save();this.rAdm();this.toast('คืนเงินเรียบร้อย')},
+delM(id){this.conf('ลบตู้นี้ถาวร?',()=>{D.M=D.M.filter(x=>x.id!==id);this.lg('ลบตู้');save();this.rAdm()})},
+addM(){this.ask('ชื่อตู้ใหม่ (ขึ้นต้น "ตู้อบ" = ตู้อบผ้า)','เช่น เครื่องฝาหน้า No.4',v=>{if(v.length>40)return this.toast('ชื่อยาวเกินไป','e');D.M.push({id:'M'+Date.now(),n:v,t:/อบ/.test(v)?'d':'w',st:'idle',w:[]});this.lg('เพิ่มตู้ '+v);save();this.rAdm()})},
 a_usr(){return `<input class="inp" placeholder="🔍 ค้นหาชื่อ / username / ห้อง" value="${esc(q)}" oninput="q=this.value;A.uList()"><div class="cd" id="ul"></div>`},
 uList(){const L=Object.entries(D.users).filter(([u,x])=>(u+x.n+x.r).toLowerCase().includes(q.toLowerCase()));
  $('ul').innerHTML=L.map(([u,x])=>`<div class="rrow" style="flex-wrap:wrap"><div><b>${esc(x.n)}</b> ${x.ban?'<span class="bg dg">ระงับ</span>':''}<br><small class="mu">@${u} · ห้อง ${esc(x.r)} · ${x.ph} · ใช้ ${x.washes} ครั้ง</small></div><div class="row" style="gap:6px"><b style="color:var(--p)">฿${x.cr.toFixed(0)}</b><button class="btn bp bs" onclick="A.credit('${u}')">＋เครดิต</button><button class="btn bo bs" onclick="A.ban('${u}')">${x.ban?'ปลดระงับ':'ระงับ'}</button><button class="btn bo bs" onclick="A.rpw('${u}')">🔑</button></div></div>`).join('')||'<p class="mu">ยังไม่มีสมาชิก (ลูกค้าต้องสมัครก่อน)</p>'},
-credit(u){this.ask('เพิ่มเครดิตให้ @'+u,'จำนวนเงิน (บาท)',v=>{const a=parseInt(v);if(!(a>0))return this.toast('จำนวนไม่ถูกต้อง','e');const x=D.users[u];x.cr+=a;x.tx.unshift({t:'แอดมินเพิ่มเครดิต',a,ts:Date.now()});this.nt(u,'ได้รับเครดิต','แอดมินเพิ่มเครดิต ฿'+a);this.lg('เพิ่มเครดิต @'+u+' ฿'+a);save();this.rAdm()},'number')},
-ban(u){D.users[u].ban=D.users[u].ban?0:1;this.lg((D.users[u].ban?'ระงับ':'ปลดระงับ')+' @'+u);save();this.rAdm()},
+credit(u){this.ask('เพิ่มเครดิตให้ @'+u,'จำนวนเงิน (บาท)',v=>{const a=parseInt(v);if(!(a>0&&a<=5000))return this.toast('ระบุ 1-5,000 บาท','e');const x=D.users[u];x.cr+=a;x.tx.unshift({t:'แอดมินเพิ่มเครดิต',a,ts:Date.now()});this.nt(u,'ได้รับเครดิต','แอดมินเพิ่มเครดิต ฿'+a);this.lg('เพิ่มเครดิต @'+u+' ฿'+a);save();this.rAdm()},'number')},
+ban(u){const x=D.users[u];if(!x)return;const go=()=>{x.ban=x.ban?0:1;this.lg((x.ban?'ระงับ':'ปลดระงับ')+' @'+u);save();this.rAdm()};x.ban?go():this.conf('ระงับบัญชี @'+u+'?',go)},
 rpw(u){this.ask('ตั้งรหัสผ่านใหม่ให้ @'+u,'รหัสผ่านใหม่ (6 ตัวขึ้นไป)',v=>{if(v.length<6)return this.toast('อย่างน้อย 6 ตัว','e');D.users[u].pw=hs(v);save();this.toast('รีเซ็ตรหัสผ่านแล้ว')})},
 a_rep(){return D.reps.length?'<div class="g">'+D.reps.map((r,i)=>{const P=r.st==='pending',R=r.st==='resolving',c=P?'var(--wr)':R?'var(--p)':'var(--ok)';
  return `<div class="cd" style="border-left:4px solid ${c}"><div class="row"><b>${esc(r.m)}</b><small class="mu">${tm(r.ts)}</small></div><p style="font-size:.8rem;margin:6px 0" class="mu">โดย ${esc(r.un)}</p><p style="font-size:.85rem"><b>${esc(r.tag)}</b><br>"${esc(r.d)}"</p><div class="row" style="margin-top:10px"><b style="font-size:.8rem;color:${c}">${P?'รอดำเนินการ':R?'กำลังซ่อม':'แก้ไขแล้ว'}</b>${r.st==='resolved'?'':`<button class="btn bp bs" onclick="A.repSt(${i},'${P?'resolving':'resolved'}')">${P?'🔨 รับเรื่อง':'✔ ซ่อมเสร็จ'}</button>`}</div></div>`}).join('')+'</div>':'<p class="mu" style="text-align:center;margin:40px">ไม่มีรายการแจ้งซ่อม 🎉</p>'},
@@ -250,11 +253,16 @@ a_set(){const p=D.pr;return `<div class="g"><div class="cd"><h3 class="t">💵 �
 savePr(){[['w',0],['w',1],['d',0],['d',1]].forEach(([t,i])=>{const v=parseInt($('pr_'+t+i).value);if(v>0)D.pr[t][i]=v});save();this.toast('บันทึกราคาแล้ว')},
 admPw(){const v=$('apw').value;if(v.length<6)return this.toast('อย่างน้อย 6 ตัว','e');D.adm.pw=hs(v);save();$('apw').value='';this.toast('เปลี่ยนรหัสแล้ว')},
 reset(){this.ask('พิมพ์ RESET เพื่อยืนยันลบข้อมูลทั้งหมด','RESET',v=>{if(v!=='RESET')return this.toast('ยกเลิก','e');D=seed();save();S=null;location.reload()})},
-ask(t,ph,cb,ty='text'){$('at').textContent=t;const i=$('ai');i.value='';i.placeholder=ph;i.type=ty;this.cb=cb;this.open('sh-ask');setTimeout(()=>i.focus(),300)},
-askOk(){const v=$('ai').value.trim();if(!v)return;this.close('sh-ask');this.cb(v)},
+ask(t,ph,cb,ty='text'){$('at').textContent=t;const i=$('ai');i.value='';i.placeholder=ph;i.type=ty;this.cb=cb;this.nc=0;i.style.display='';this.open('sh-ask');setTimeout(()=>i.focus(),300)},
+conf(t,cb){this.ask(t,'',cb);this.nc=1;$('ai').style.display='none'},
+askOk(){const v=$('ai').value.trim();if(!v&&!this.nc)return;this.close('sh-ask');this.cb(v)},
 open(id){$(id).classList.add('on');if(id==='sh-top')this.hiAmt()},close(id){$(id).classList.remove('on')},ovc(e,id){if(e.target.id===id)this.close(id)},
 confetti(){const c=$('cfx');for(let i=0;i<24;i++){const e=document.createElement('i');e.textContent=['🫧','✨','💙','🧼'][i%4];e.style.left=Math.random()*100+'%';e.style.animationDelay=Math.random()*.6+'s';e.style.fontSize=14+Math.random()*14+'px';c.appendChild(e);setTimeout(()=>e.remove(),2600)}},
 toast(m,t){const e=document.createElement('div');e.className='toast';e.innerHTML=(t==='e'?'⚠️ ':'✅ ')+esc(m);$('toast').appendChild(e);setTimeout(()=>{e.style.opacity='0';setTimeout(()=>e.remove(),400)},2600)}
 };
+Object.keys(A).forEach(k=>{const f=A[k];if(typeof f!=='function'||k==='toast')return;A[k]=function(...a){try{return f.apply(this,a)}catch(e){console.error(k,e);A.toast('เกิดข้อผิดพลาด ('+k+') ลองใหม่อีกครั้ง','e')}}});
+window.addEventListener('storage',e=>{if(e.key!=='wm4'||!e.newValue)return;try{D=JSON.parse(e.newValue)}catch(x){return}
+ if(!S)return;if(S.r==='user'&&(!D.users[S.u]||D.users[S.u].ban)){A.toast('บัญชีถูกปิดหรือระงับ','e');return A.logout()}
+ const a=document.activeElement;if(document.querySelector('.ov.on')||(a&&a.tagName==='INPUT'))return;A.rAll()});
 A.init();
 </script></body></html>
