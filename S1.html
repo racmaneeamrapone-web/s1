@@ -1,15 +1,15 @@
 <!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>WashMate v4</title>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--p:#0ea5e9;--pd:#0369a1;--on:#fff;--bg:#e8f5fc;--cd:#ffffff;--tx:#0f2a3a;--mu:#64809a;--ok:#059669;--wr:#b45309;--dg:#dc2626;--bd:rgba(15,42,58,.1);--gl:rgba(14,165,233,.28);--sh:rgba(3,105,161,.45);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-body.ad{--sh:rgba(55,48,163,.45);--p:#4f46e5;--pd:#3730a3;--on:#fff;--bg:#eef2f7;--cd:#fff;--tx:#0f172a;--mu:#64748b;--bd:#e2e8f0;--gl:rgba(79,70,229,.25)}
+:root{--p:#8b5cf6;--pd:#6d28d9;--on:#fff;--bg:#efeafe;--cd:#ffffff;--tx:#2a1f55;--mu:#7b70a6;--ok:#059669;--wr:#b45309;--dg:#dc2626;--bd:rgba(60,40,120,.1);--gl:rgba(139,92,246,.28);--sh:rgba(91,33,182,.45);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body.ad{--sh:rgba(15,118,110,.45);--p:#0d9488;--pd:#0f766e;--on:#fff;--bg:#eef2f7;--cd:#fff;--tx:#0f172a;--mu:#64748b;--bd:#e2e8f0;--gl:rgba(13,148,136,.25)}
 html,body{height:100%}*{margin:0;padding:0;box-sizing:border-box;font-family:'Prompt',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--tx);overflow:hidden;transition:background .4s}
 .scr{display:none;height:100%;justify-content:center}.scr.on{display:flex}
-.app{width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;position:relative;box-shadow:0 0 60px var(--gl);background:radial-gradient(circle at 80% -10%,var(--gl),transparent 45%),var(--bg)}
+.app{width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;position:relative;box-shadow:0 0 60px var(--gl);background:radial-gradient(circle at 10% 92%,rgba(244,114,182,.18),transparent 40%),radial-gradient(circle at 80% -10%,var(--gl),transparent 45%),var(--bg);overflow:hidden;isolation:isolate}
 .adm{width:100%;max-width:1000px;height:100%;display:flex;flex-direction:column}
 .bdy{flex:1;overflow-y:auto;padding:16px 16px 100px}.adm .bdy{padding:18px}
-.hd{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);background:rgba(255,255,255,.62);backdrop-filter:blur(16px);box-shadow:0 6px 20px rgba(3,105,161,.08)}
+.hd{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);background:rgba(255,255,255,.62);backdrop-filter:blur(16px);box-shadow:0 6px 20px rgba(91,33,182,.08)}
 .ah{padding:16px 20px;background:var(--pd);color:#fff;display:flex;justify-content:space-between;align-items:center}
 .tabs{display:flex;gap:6px;padding:10px 14px;overflow-x:auto;background:var(--cd);border-bottom:1px solid var(--bd);scrollbar-width:none}
 .tb{padding:9px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;color:var(--mu);white-space:nowrap;font-weight:500;transition:.15s}.tb:active{transform:translateY(2px)}
@@ -21,15 +21,15 @@ body{background:var(--bg);color:var(--tx);overflow:hidden;transition:background 
 .bx{background:var(--dg);color:#fff;box-shadow:0 5px 0 #9b1c1c}.bx:active{box-shadow:0 1px 0 #9b1c1c}
 .bs{width:auto;padding:8px 13px;font-size:.78rem;border-radius:11px}.bs:active{transform:translateY(2px)}.bs.bp,.bs.bo,.bs.bx{box-shadow:0 3px 0 rgba(0,0,0,.3)}
 .rp{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rpl .6s ease-out;pointer-events:none;width:20px;height:20px;margin:-10px}@keyframes rpl{to{transform:scale(10);opacity:0}}
-.cd{background:var(--cd);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 12px 30px rgba(3,105,161,.13),inset 0 2px 0 #fff;transition:transform .2s}
+.cd{background:var(--cd);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 12px 30px rgba(91,33,182,.13),inset 0 2px 0 #fff;transition:transform .2s}
 .app .cd:hover{transform:translateY(-2px)}.cd.run{border-color:var(--p);box-shadow:0 0 24px var(--gl)}
 body.ad .cd{box-shadow:0 1px 2px rgba(15,23,42,.06),0 6px 16px rgba(15,23,42,.06)}
 .inp{width:100%;padding:13px 14px;border-radius:13px;border:1px solid var(--bd);background:rgba(127,127,127,.1);color:var(--tx);outline:0;font-size:.92rem;margin-bottom:10px}.inp:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--gl)}
 .lb{font-size:.74rem;color:var(--mu);margin:0 0 4px 2px;display:block}
 .row{display:flex;justify-content:space-between;align-items:center}.mu{color:var(--mu)}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.g .cd{margin:0}
 h3.t{font-size:.95rem;color:var(--mu);margin:6px 0 10px}
-#s-auth{overflow-y:auto;-webkit-overflow-scrolling:touch}.au{width:100%;max-width:440px;margin:auto;padding:20px 20px 48px}.ac{background:rgba(255,255,255,.7);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.9);border-radius:28px;padding:26px 22px;box-shadow:0 24px 50px rgba(3,105,161,.18),inset 0 2px 0 #fff}
-.door{width:84px;height:84px;margin:0 auto 10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#bfe6f7 45%,#5db8e6);border:7px solid #e8f1f6;box-shadow:0 8px 20px rgba(3,105,161,.3),inset 0 0 18px rgba(3,105,161,.35)}.door i{display:block;width:100%;height:100%;border-radius:50%;background:conic-gradient(transparent 0 70%,rgba(255,255,255,.75) 80%,transparent 90%);animation:dsp 4s linear infinite}@keyframes dsp{to{transform:rotate(360deg)}}.cd.run .mi{animation:wob .5s infinite alternate}@keyframes wob{to{transform:translate(1.5px,-1.5px) rotate(2deg)}}
+#s-auth{overflow-y:auto;-webkit-overflow-scrolling:touch}.au{width:100%;max-width:440px;margin:auto;padding:20px 20px 48px}.ac{background:rgba(255,255,255,.7);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.9);border-radius:28px;padding:26px 22px;box-shadow:0 24px 50px rgba(91,33,182,.18),inset 0 2px 0 #fff}
+.door{width:84px;height:84px;margin:0 auto 10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#ddd2fc 45%,#8b5cf6);border:7px solid #f1edff;box-shadow:0 8px 20px rgba(91,33,182,.3),inset 0 0 18px rgba(91,33,182,.35)}.door i{display:block;width:100%;height:100%;border-radius:50%;background:conic-gradient(transparent 0 70%,rgba(255,255,255,.75) 80%,transparent 90%);animation:dsp 4s linear infinite}@keyframes dsp{to{transform:rotate(360deg)}}.cd.run .mi{animation:wob .5s infinite alternate}@keyframes wob{to{transform:translate(1.5px,-1.5px) rotate(2deg)}}
 .fm{display:none}.fm.on{display:block}.lk{color:var(--p);cursor:pointer;font-size:.85rem;font-weight:500}
 .hint{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--wr);padding:9px 12px;border-radius:12px;font-size:.78rem;margin-bottom:12px}
 .mi{width:60px;height:60px;border-radius:16px;background:rgba(127,127,127,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
@@ -41,7 +41,7 @@ h3.t{font-size:.95rem;color:var(--mu);margin:6px 0 10px}
 .st{padding:16px;text-align:left}.st b{font-size:1.7rem}
 .how{display:flex;gap:6px;font-size:.72rem;text-align:center;margin-bottom:14px}.how div{flex:1;background:var(--gl);padding:9px 4px;border-radius:12px}
 .ann{background:linear-gradient(135deg,var(--gl),transparent);border:1px solid var(--p);border-radius:16px;padding:12px 14px;font-size:.82rem;margin-bottom:14px}
-.nav{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.8);box-shadow:0 -8px 24px rgba(3,105,161,.1);backdrop-filter:blur(20px);border-top:1px solid var(--bd);display:flex;justify-content:space-around;padding:10px 6px calc(12px + env(safe-area-inset-bottom,0px));z-index:50}
+.nav{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.8);box-shadow:0 -8px 24px rgba(91,33,182,.1);backdrop-filter:blur(20px);border-top:1px solid var(--bd);display:flex;justify-content:space-around;padding:10px 6px calc(12px + env(safe-area-inset-bottom,0px));z-index:50}
 .ni{display:flex;flex-direction:column;align-items:center;color:var(--mu);cursor:pointer;width:70px;font-size:.66rem;transition:.2s}.ni b{font-size:1.3rem;filter:grayscale(1);transition:.2s}.ni:active{transform:translateY(3px)}.ni.on{color:var(--p)}.ni.on b{filter:none;transform:translateY(-3px) scale(1.15)}
 .view{display:none}.view.on{display:block;animation:up .35s cubic-bezier(.16,1,.3,1)}@keyframes up{from{opacity:0;transform:translateY(14px)}}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:.3s;z-index:2000;display:flex;align-items:flex-end;justify-content:center}.ov.on{opacity:1;pointer-events:auto}
@@ -55,12 +55,32 @@ body.ad .ov{align-items:center}body.ad .sheet{border-radius:24px;border:1px soli
 .mb{max-width:82%;padding:10px 14px;border-radius:18px;font-size:.86rem;line-height:1.45;margin-bottom:8px}.ma{background:rgba(127,127,127,.18);border-bottom-left-radius:4px}.mus{background:linear-gradient(135deg,var(--pd),var(--p));color:var(--on);margin-left:auto;border-bottom-right-radius:4px}
 .tl{padding-left:20px;border-left:2px solid var(--gl)}.ti{background:var(--cd);border:1px solid var(--bd);border-radius:16px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 .rrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--bd)}.rrow:last-child{border:0}
+.pn{position:absolute;inset:0;z-index:60;background:#ece9fb;display:none;flex-direction:column;overflow-y:auto;padding:14px 16px 30px;color:#3b2f6b}.pn.on{display:flex}
+.nmo{background:#ece9fb;border-radius:20px;box-shadow:7px 7px 16px #cdc6ee,-7px -7px 16px #fff}.nmi{background:#ece9fb;box-shadow:inset 4px 4px 9px #cdc6ee,inset -4px -4px 9px #fff}
+.pb{border:0;border-radius:16px;padding:16px 6px;background:#ece9fb;box-shadow:6px 6px 13px #cdc6ee,-6px -6px 13px #fff;font-weight:500;font-size:.78rem;letter-spacing:.5px;color:#3b2f6b;cursor:pointer;transition:.1s;font-family:inherit}
+.pb:active{box-shadow:inset 4px 4px 9px #cdc6ee,inset -4px -4px 9px #fff;transform:translateY(1px)}.pb:disabled{opacity:.45;cursor:default}
+.pb.act{color:#5b21b6;background:#efe9ff;box-shadow:0 0 0 1.5px #8b5cf6,0 0 18px rgba(59,155,224,.55),inset 0 2px 0 #fff}
+.dl{width:86px;height:86px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;background:conic-gradient(#8b5cf6 calc(var(--v)*1%),#d9d3f0 0);box-shadow:6px 6px 13px #cdc6ee,-6px -6px 13px #fff}
+.dl:before{content:'';position:absolute;inset:8px;border-radius:50%;background:#f3f0fe;box-shadow:inset 3px 3px 6px #cdc6ee,inset -3px -3px 6px #fff}.dl b{position:relative;font-size:.8rem;font-weight:500}.dl:active{transform:scale(.97)}
+.dlb{font-size:.66rem;color:#7b70a6;letter-spacing:.6px;display:block;margin-top:9px;text-align:center}
+.pbr{height:14px;border-radius:9px;background:#e1dcf6;box-shadow:inset 2px 2px 5px #c3ccd4,inset -2px -2px 5px #fff;overflow:hidden}.pbr i{display:block;height:100%;background:linear-gradient(#a78bfa,#8b5cf6);border-radius:9px;transition:width 1s linear}
+.sp{transform-origin:140px 120px;animation:dsp 1.1s linear infinite}
 .trans{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;opacity:0;pointer-events:none;transition:.3s}.trans.on{opacity:1;pointer-events:auto}.trans span{font-size:3.5rem;animation:sc 1s infinite alternate}@keyframes sc{to{transform:translateY(10px);filter:drop-shadow(0 0 20px var(--p))}}
 #toast{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:4000;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:92%;max-width:420px}
 .toast{background:#0c1220;color:#fff;border:1px solid var(--p);padding:11px 18px;border-radius:40px;font-size:.84rem;box-shadow:0 10px 24px rgba(0,0,0,.4);animation:ts .35s cubic-bezier(.16,1,.3,1)}@keyframes ts{from{opacity:0;transform:translateY(-16px) scale(.9)}}
 .cfx{position:fixed;inset:0;pointer-events:none;z-index:5000;overflow:hidden}.cfx i{position:absolute;top:-20px;font-style:normal;animation:fall 1.8s ease-in forwards}@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}
 .bell{position:relative;cursor:pointer;font-size:1.1rem;padding:6px 9px;background:rgba(127,127,127,.15);border-radius:12px}.bell i{position:absolute;top:2px;right:2px;width:9px;height:9px;background:var(--dg);border-radius:50%;display:none}.bell.has i{display:block}
 .chip{background:var(--gl);padding:6px 13px;border-radius:20px;color:var(--p);font-weight:600;font-size:.88rem;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.3);transition:.1s}.chip:active{transform:translateY(3px);box-shadow:none}
+.app:before,.app:after{content:'';position:absolute;border-radius:50%;z-index:-1;pointer-events:none;animation:flo 8s ease-in-out infinite alternate}
+.app:before{width:130px;height:130px;top:70px;right:-46px;background:radial-gradient(circle at 30% 28%,#fff 0,#e3d9ff 28%,#a78bfa 70%,#7c3aed);box-shadow:0 24px 44px rgba(91,33,182,.28),inset -8px -10px 18px rgba(91,33,182,.25)}
+.app:after{width:84px;height:84px;bottom:130px;left:-26px;background:radial-gradient(circle at 30% 28%,#fff 0,#d5e6ff 30%,#7dd3fc 72%,#38bdf8);animation-delay:-3s;box-shadow:0 18px 34px rgba(14,116,144,.25),inset -6px -8px 14px rgba(14,116,144,.22)}
+@keyframes flo{to{transform:translate(-16px,34px)}}
+.hd{margin:10px 12px 0;border-radius:22px;border:1px solid rgba(255,255,255,.9)}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mc2{background:rgba(255,255,255,.78);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.95);border-radius:22px;padding:12px;box-shadow:0 14px 32px rgba(91,33,182,.14),inset 0 2px 0 #fff;transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;gap:6px}
+.mc2:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(91,33,182,.2),inset 0 2px 0 #fff}.mc2.run{border-color:var(--p);box-shadow:0 0 26px var(--gl),inset 0 2px 0 #fff}.mc2.off{filter:grayscale(.6);opacity:.8}
+.mn{font-size:.74rem;line-height:1.3}.pill{font-size:.62rem;font-weight:600;padding:3px 8px;border-radius:10px;white-space:nowrap}.pill.ok{background:#d1fae5;color:#047857}.pill.pr{background:#ede9fe;color:#6d28d9}.pill.dg{background:#fee2e2;color:#b91c1c}
+.mw{cursor:pointer;padding:4px 0}.mt2{font-size:.7rem;color:var(--mu);text-align:center;margin:2px 0 6px}
 </style></head><body>
 <div class="trans" id="trans"><span>🧬</span><h3 id="tt" style="color:var(--p)">กำลังเข้าสู่ระบบ...</h3></div>
 <div id="toast"></div><div class="cfx" id="cfx"></div>
@@ -88,7 +108,7 @@ body.ad .ov{align-items:center}body.ad .sheet{border-radius:24px;border:1px soli
 <div class="scr" id="s-user"><div class="app">
 <div class="hd"><div><p class="mu" style="font-size:.74rem">สวัสดี,</p><b id="uname"></b></div><div class="row" style="gap:10px"><div class="chip" onclick="A.open('sh-top')">฿<span id="ucr">0</span> ＋</div><div class="bell" id="bell" onclick="A.openN()">🔔<i></i></div></div></div>
 <div class="bdy">
-<div class="view on" id="v-home"><div id="howto"></div><div id="ann"></div><div class="sum"><div><b id="kf">0</b><small>ว่าง</small></div><div><b id="kb">0</b><small>กำลังใช้งาน</small></div><div><b id="kd">0</b><small>ปิดซ่อม</small></div></div><div class="tags" id="flt"></div><div id="mlist"></div></div>
+<div class="view on" id="v-home"><div style="text-align:center;margin:2px 0 14px"><small class="lk" style="letter-spacing:.8px;font-size:.6rem">MANAGE YOUR TIME EFFICIENTLY</small><h2 style="font-size:1.25rem;margin:4px 0">เลือกเครื่อง เริ่มซักได้เลย!</h2><p class="mu" style="font-size:.76rem">ดูสถานะตู้แบบเรียลไทม์ ประตูเปิด = ว่าง · ประตูปิด = กำลังใช้งาน</p></div><div id="howto"></div><div id="ann"></div><div class="sum"><div><b id="kf">0</b><small>ว่าง</small></div><div><b id="kb">0</b><small>กำลังใช้งาน</small></div><div><b id="kd">0</b><small>ปิดซ่อม</small></div></div><div class="tags" id="flt"></div><div id="mlist"></div></div>
 <div class="view" id="v-hist"><div class="tags"><div class="tag" id="hw" onclick="A.hvw('w')">🧺 การใช้งาน</div><div class="tag" id="ht" onclick="A.hvw('t')">💳 กระเป๋าเงิน</div></div><div class="tl" id="hl"></div></div>
 <div class="view" id="v-chat"><h3 class="t">แชทกับแอดมิน (แอดมินตอบกลับได้จริง)</h3><div id="cb" style="min-height:240px;max-height:48vh;overflow-y:auto;padding:4px"></div>
 <div class="tags" style="margin:8px 0"><div class="tag" onclick="A.chat('ราคาเท่าไหร่')">ราคาเท่าไหร่?</div><div class="tag" onclick="A.chat('เครื่องกินเงิน')">เครื่องกินเงิน</div><div class="tag" onclick="A.chat('เปิดกี่โมง')">เปิดกี่โมง?</div><div class="tag" onclick="A.chat('เติมเงินยังไง')">เติมเงิน</div></div>
@@ -99,7 +119,7 @@ body.ad .ov{align-items:center}body.ad .sheet{border-radius:24px;border:1px soli
 <button class="btn bo" style="margin-bottom:12px" onclick="A.editP()">✏️ แก้ไขข้อมูล / เปลี่ยนรหัสผ่าน</button><button class="btn bx" onclick="A.logout()">🚪 ออกจากระบบ</button></div>
 <h3 class="t">การใช้งาน 7 วันล่าสุด</h3><div class="chart" id="chart"></div><h3 class="t">เหรียญตรา</h3><div class="ach" id="ach"></div></div>
 </div>
-<nav class="nav"><div class="ni on" onclick="A.tab('home',this)"><b>🧺</b>ตู้ซัก</div><div class="ni" onclick="A.tab('hist',this)"><b>🕘</b>ประวัติ</div><div class="ni" onclick="A.tab('chat',this)"><b>🎧</b>ติดต่อ</div><div class="ni" onclick="A.tab('prof',this)"><b>🧑‍🚀</b>โปรไฟล์</div></nav>
+<nav class="nav"><div class="ni on" onclick="A.tab('home',this)"><b>🧺</b>ตู้ซัก</div><div class="ni" onclick="A.tab('hist',this)"><b>🕘</b>ประวัติ</div><div class="ni" onclick="A.tab('chat',this)"><b>🎧</b>ติดต่อ</div><div class="ni" onclick="A.tab('prof',this)"><b>🧑‍🚀</b>โปรไฟล์</div></nav><div class="pn" id="pnl"></div>
 </div></div>
 
 <!-- ADMIN -->
@@ -130,13 +150,17 @@ const tm=t=>new Date(t).toLocaleString('th-TH',{day:'numeric',month:'short',hour
 const AD=[{n:'น้ำยาปรับผ้านุ่ม',p:5,e:'🌸'},{n:'ล้างน้ำเพิ่ม 1 รอบ',p:10,e:'💦',s:20}];
 const TAGS=['ระบบน้ำขัดข้อง/น้ำรั่ว','เครื่องกินเงิน','ฝาตู้ปิดไม่สนิท','เครื่องไม่ปั่นหมาด','อื่นๆ'];
 const AMTS=[[50,0],[100,0],[300,20],[500,50]];
+const TP=[30,40,60],RP=[800,1000,1200],SL=['LIGHT','MEDIUM','HEAVY'];
+const CK=()=>new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+const WF='<svg width="18" height="16" viewBox="0 0 24 20"><path d="M3 8a14 14 0 0 1 18 0M6.5 12a9 9 0 0 1 11 0M10 16a4 4 0 0 1 4 0" fill="none" stroke="#8b5cf6" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="19" r="1.4" fill="#8b5cf6"/></svg>';
+const SH='<svg width="18" height="18" viewBox="0 0 24 24"><path d="M3 8l6-4q3 3 6 0l6 4-3 5-3-1.5V21H9V11.5L6 13z" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/></svg>';
 const PROMO={WASH10:t=>Math.round(t*.1),FIRST:(t,u)=>u.washes?0:10};
 const seed=()=>({users:{},adm:{u:'admin',pw:hs('admin1234')},M:[{id:'M1',n:'เครื่องฝาหน้า No.1',t:'w',st:'idle',w:[]},{id:'M2',n:'เครื่องฝาบน No.2',t:'w',st:'idle',w:[]},{id:'M3',n:'ตู้อบผ้า No.3',t:'d',st:'idle',w:[]}],pr:{w:[30,40],d:[15,25]},reps:[],msgs:[],logs:[],rv:{},ann:'ยินดีต้อนรับสู่ WashMate 🎉 ใช้โค้ด FIRST ลด ฿10 สำหรับการซักครั้งแรก',s:null});
 let D=null;try{D=JSON.parse(localStorage.getItem('wm4'))}catch(e){}D=Object.assign(seed(),D&&typeof D==='object'?D:{});
 const save=()=>{try{localStorage.setItem('wm4',JSON.stringify(D))}catch(e){}};
 const ss=v=>{try{v?sessionStorage.setItem('wm4s',JSON.stringify(v)):sessionStorage.removeItem('wm4s')}catch(e){}};
 const modes=t=>(t==='d'?[['อบเร็ว','1 นาที',60,'🔥'],['อบแห้งนุ่ม','2 นาที',120,'☀️']]:[['ซักด่วน','1 นาที',60,'⚡'],['ซักล้ำลึก','2 นาที',120,'👕']]).map((m,i)=>({n:m[0],d:m[1],s:m[2],e:m[3],p:D.pr[t][i]}));
-let S=null,cur=null,mode=0,adds=[],promo='',flt='all',topAmt=100,hv='w',at='dash',tag=TAGS[0],q='';
+const DS={};let cfg={t:1,r:2,s:1},S=null,cur=null,mode=0,adds=[],promo='',flt='all',topAmt=100,hv='w',at='dash',tag=TAGS[0],q='';
 const U=()=>D.users[S.u];
 const A={
 init(){document.addEventListener('pointerdown',e=>{const b=e.target.closest('.btn');if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement('span');s.className='rp';s.style.left=e.clientX-r.left+'px';s.style.top=e.clientY-r.top+'px';b.appendChild(s);setTimeout(()=>s.remove(),600)});
@@ -158,7 +182,7 @@ forgot(){const u=$('fu').value.trim().toLowerCase(),x=D.users[u],p=$('fp').value
 enter(s){S=s;ss(s);$('tt').textContent=s.r==='admin'?'เข้าสู่ระบบผู้ดูแล...':'กำลังโหลดข้อมูลของคุณ...';$('trans').classList.add('on');setTimeout(()=>{this.show();$('trans').classList.remove('on');this.toast('เข้าสู่ระบบสำเร็จ')},700)},
 show(){document.body.classList.toggle('ad',S.r==='admin');document.querySelectorAll('.scr').forEach(e=>e.classList.remove('on'));
  if(S.r==='admin'){$('s-admin').classList.add('on');at='dash';this.rAdm()}else{$('s-user').classList.add('on');this.rUser()}},
-logout(){$('tt').textContent='กำลังออกจากระบบ...';$('trans').classList.add('on');S=null;ss(null);setTimeout(()=>{document.body.classList.remove('ad');document.querySelectorAll('.scr').forEach(e=>e.classList.remove('on'));$('s-auth').classList.add('on');$('lp').value='';$('sp').value='';this.go('login');$('trans').classList.remove('on')},500)},
+logout(){$('tt').textContent='กำลังออกจากระบบ...';$('trans').classList.add('on');S=null;ss(null);$('pnl').classList.remove('on');cur=null;setTimeout(()=>{document.body.classList.remove('ad');document.querySelectorAll('.scr').forEach(e=>e.classList.remove('on'));$('s-auth').classList.add('on');$('lp').value='';$('sp').value='';this.go('login');$('trans').classList.remove('on')},500)},
 lg(t){D.logs.unshift({t,ts:Date.now()});D.logs=D.logs.slice(0,40)},
 nt(u,t,d){const x=D.users[u];if(x)x.no.unshift({t,d,ts:Date.now(),r:0})},
 rAll(){if(!S)return;S.r==='admin'?this.rAdm():this.rUser()},
@@ -167,16 +191,17 @@ tab(t,el){document.querySelectorAll('#s-user .view').forEach(v=>v.classList.remo
 rUser(){const u=U();if(!u||u.ban){S=null;ss(null);return this.logout()}$('uname').textContent=u.n.split(' ')[0];$('ucr').textContent=u.cr.toFixed(0);$('bell').classList.toggle('has',u.no.some(n=>!n.r));
  $('ann').innerHTML=D.ann?`<div class="ann">📢 ${esc(D.ann)}</div>`:'';
  $('howto').innerHTML=u.washes?'':'<div class="how"><div>① เลือกตู้ที่ว่าง</div><div>② เลือกโปรแกรม</div><div>③ จ่ายด้วยเครดิต<br>แล้วรอแจ้งเตือน</div></div>';
- this.rMach();this.rHist();this.rChat();this.rProf()},
+ this.rMach();this.rHist();this.rChat();this.rProf();this.rPanel()},
+dopen(m){return m.st==='idle'?!m.dc:m.st==='busy'?!!m.dr:false},
+anim(){document.querySelectorAll('.dg').forEach(e=>{const o=e.dataset.o==='1';requestAnimationFrame(()=>requestAnimationFrame(()=>{e.style.transform='scaleX('+(o?.3:1)+')'}));DS[e.dataset.k]=o})},
 rMach(){const c={f:0,b:0,d:0};D.M.forEach(m=>c[m.st==='idle'?'f':m.st==='busy'?'b':'d']++);$('kf').textContent=c.f;$('kb').textContent=c.b;$('kd').textContent=c.d;
  $('flt').innerHTML=[['all','ทั้งหมด'],['idle','ว่าง'],['busy','กำลังใช้'],['w','เครื่องซัก'],['d','ตู้อบ']].map(([k,l])=>`<div class="tag ${flt===k?'on':''}" onclick="flt='${k}';A.rMach()">${l}</div>`).join('');
  const L=D.M.filter(m=>flt==='all'||m.st===flt||m.t===flt);
- $('mlist').innerHTML=L.length?L.map(m=>{const i=m.st==='idle',b=m.st==='busy',l=b?Math.max(0,Math.ceil((m.end-Date.now())/1000)):0,me=b&&m.by===S.u,wt=(m.w||[]).includes(S.u);
- return `<div class="cd ${b?'run':''}" style="${m.st==='maint'?'opacity:.65':''}"><div class="row" style="gap:12px"><div class="mi">${m.t==='d'?'🌬️':'🧺'}</div><div style="flex:1"><b>${esc(m.n)}</b><br><span class="bg ${i?'ok':b?'pr':'dg'}">${i?'● ว่าง พร้อมใช้งาน':b?'● กำลังทำงาน'+(me?' (ของคุณ)':''):'● ปิดซ่อม'}</span></div></div>
- <div class="sg"><div class="sb">💧<b id="w${m.id}">${b?'50%':'0%'}</b><small>น้ำ</small></div><div class="sb">🌡️<b id="t${m.id}">${b?'32°C':'28°C'}</b><small>อุณหภูมิ</small></div><div class="sb">⚙️<b id="r${m.id}">${b?'900':'0'}</b><small>รอบ/นาที</small></div></div>
- ${i?`<div class="row" style="gap:10px"><button class="btn bp" style="flex:3" onclick="A.book('${m.id}')">เริ่มใช้งาน</button><button class="btn bo" style="flex:1" onclick="A.rep('${m.id}')">⚠️</button></div>`
- :b?`<div class="pr"><div class="pf" id="pf${m.id}" style="width:${100-l/m.max*100}%"></div></div><div class="row" style="font-size:.84rem"><span style="color:var(--p);font-weight:600">เหลือ <span id="tl${m.id}">${fmt(l)}</span></span>${me?'':`<button class="btn bo bs" ${wt?'disabled':''} onclick="A.watch('${m.id}')">${wt?'✓ จะแจ้งเตือนแล้ว':'🔔 แจ้งเมื่อว่าง'}</button>`}</div>`
- :'<button class="btn bo" disabled>ระงับใช้งานชั่วคราว</button>'}</div>`}).join(''):'<p class="mu" style="text-align:center;margin:30px">ไม่พบตู้ตามตัวกรอง</p>'},
+ $('mlist').innerHTML=L.length?'<div class="mg">'+L.map(m=>{const i=m.st==='idle',b=m.st==='busy',pz=b&&m.pz,l=b?Math.max(0,Math.ceil((m.end-(m.pz||Date.now()))/1000)):0,me=b&&m.by===S.u,wt=(m.w||[]).includes(S.u);
+ return `<div class="mc2 ${b?'run':''} ${m.st==='maint'?'off':''}"><div class="row" style="gap:6px;align-items:flex-start"><b class="mn">${esc(m.n)}</b><span class="pill ${i?'ok':b?'pr':'dg'}">${i?'ว่าง':b?(pz?'หยุดชั่วคราว':'กำลังใช้'):'ปิดซ่อม'}</span></div>
+ <div class="mw" onclick="A.panel('${m.id}')">${this.door(this.dopen(m),b&&!pz,m.id)}</div>
+ ${b?`<div class="row" style="font-size:.7rem;color:var(--mu)"><span>เวลาที่เหลือ</span><b id="tl${m.id}" style="color:var(--p)">${fmt(l)}</b></div><div class="pr" style="margin:6px 0 10px"><div class="pf" id="pf${m.id}" style="width:${100-l/m.max*100}%"></div></div>`:`<p class="mt2">${i?'พร้อมใช้งานทันที':'รอช่างตรวจสอบ'}</p>`}
+ ${i?`<button class="btn bp bs" style="width:100%" onclick="A.panel('${m.id}')">เริ่มใช้งาน</button>`:b?(me?`<button class="btn bp bs" style="width:100%" onclick="A.panel('${m.id}')">แผงควบคุม</button>`:`<button class="btn bo bs" style="width:100%" ${wt?'disabled':''} onclick="A.watch('${m.id}')">${wt?'✓ จะแจ้งเตือน':'🔔 แจ้งเมื่อว่าง'}</button>`):'<button class="btn bo bs" style="width:100%" disabled>ปิดซ่อม</button>'}</div>`}).join('')+'</div>':'<p class="mu" style="text-align:center;margin:30px">ไม่พบตู้ตามตัวกรอง</p>'},
 watch(id){const m=D.M.find(x=>x.id===id);m.w=m.w||[];if(!m.w.includes(S.u))m.w.push(S.u);save();this.rMach();this.toast('จะแจ้งเตือนเมื่อตู้ว่าง')},
 book(id){cur=D.M.find(x=>x.id===id);mode=0;adds=[];promo='';$('pcd').value='';$('bn').textContent=cur.n;$('adw').style.display=cur.t==='w'?'block':'none';this.rBook();this.open('sh-book')},
 sub(){return modes(cur.t)[mode].p+(cur.t==='w'?adds.reduce((s,i)=>s+AD[i].p,0):0)},
@@ -186,14 +211,14 @@ rBook(){$('modes').innerHTML=modes(cur.t).map((m,i)=>`<div class="li ${mode===i?
  const s=this.sub(),d=this.disc(s);$('psum').innerHTML=`<div class="row"><span class="mu">ราคา</span><span>฿${s}</span></div><div class="row"><span class="mu">ส่วนลด ${promo}</span><span style="color:var(--ok)">-฿${d}</span></div><div class="row"><span class="mu">เครดิตคงเหลือ</span><span>฿${U().cr.toFixed(0)}</span></div>`;$('bbtn').textContent='ชำระ ฿'+(s-d)},
 tog(i){const k=adds.indexOf(i);k<0?adds.push(i):adds.splice(k,1);this.rBook()},
 applyP(){const c=$('pcd').value.trim().toUpperCase();if(PROMO[c]&&PROMO[c](100,U())>0){promo=c;this.toast('ใช้โค้ด '+c+' สำเร็จ')}else{promo='';this.toast('โค้ดไม่ถูกต้องหรือใช้ไม่ได้','e')}this.rBook()},
-pay(){const m=cur,u=U();if(m.st!=='idle'){this.close('sh-book');return this.toast('ตู้ไม่ว่างแล้ว','e')}
+pay(){const m=D.M.find(x=>x.id===cur.id)||cur,u=U();if(m.st!=='idle'){this.close('sh-book');return this.toast('ตู้ไม่ว่างแล้ว','e')}
  const md=modes(m.t)[mode],s=this.sub(),tot=s-this.disc(s);if(u.cr<tot){this.close('sh-book');this.toast('เครดิตไม่พอ กรุณาเติมเงิน','e');return setTimeout(()=>this.open('sh-top'),350)}
  const sec=md.s+(m.t==='w'?adds.reduce((a,i)=>a+(AD[i].s||0),0):0),id='H'+Date.now();
  u.cr-=tot;u.washes++;u.spent+=tot;D.rv[day()]=(D.rv[day()]||0)+tot;u.h.unshift({id,m:m.n,p:tot,ts:Date.now(),st:'run'});u.tx.unshift({t:'ชำระ '+m.n,a:-tot,ts:Date.now()});
- Object.assign(m,{st:'busy',max:sec,end:Date.now()+sec*1000,by:S.u,hid:id,paid:tot,w:[]});this.lg(u.n+' ใช้ '+m.n+' ฿'+tot);save();this.close('sh-book');this.rUser();this.toast('เริ่มทำงาน '+m.n+' ('+fmt(sec)+' นาที)')},
-tick(){const now=Date.now();let ch=0;D.M.forEach(m=>{if(m.st!=='busy')return;const l=Math.ceil((m.end-now)/1000);if(l<=0){this.fin(m);ch=1;return}
- const e=(f,v)=>{const x=$(f+m.id);if(x)x.textContent=v},p=1-l/m.max;e('tl',fmt(l));e('al',fmt(l));const b=$('pf'+m.id);if(b)b.style.width=p*100+'%';e('w',Math.min(95,40+Math.round(p*55))+'%');e('t',(30+Math.random()*8|0)+'°C');e('r',m.t==='d'?'—':800+(Math.random()*400|0))});if(ch)this.rAll()},
-fin(m){m.st='idle';const u=D.users[m.by];if(u){const h=u.h.find(x=>x.id===m.hid);if(h)h.st='done';this.nt(m.by,'เสร็จแล้ว ✅','กรุณามารับผ้าที่ '+m.n)}(m.w||[]).forEach(x=>this.nt(x,'ตู้ว่างแล้ว 🔔',m.n+' พร้อมให้ใช้งาน'));m.w=[];this.lg(m.n+' ทำงานเสร็จ');save();
+ Object.assign(m,{st:'busy',max:sec,end:Date.now()+sec*1000,by:S.u,hid:id,paid:tot,w:[],cfg:{...cfg},mi:mode,pz:0,dr:0,dc:0});this.lg(u.n+' ใช้ '+m.n+' ฿'+tot);save();this.close('sh-book');this.rUser();this.toast('เริ่มทำงาน '+m.n+' ('+fmt(sec)+' นาที)')},
+tick(){const now=Date.now();const k=$('pcl');if(k){k.textContent=CK();$('pwf').textContent=navigator.onLine?'WI-FI CONNECTED':'OFFLINE'}let ch=0;D.M.forEach(m=>{if(m.st!=='busy')return;const l=Math.ceil((m.end-(m.pz||now))/1000);if(l<=0){this.fin(m);ch=1;return}
+ const e=(f,v)=>{const x=$(f+m.id);if(x)x.textContent=v},p=1-l/m.max;e('tl',fmt(l));e('al',fmt(l));const b=$('pf'+m.id);if(b)b.style.width=p*100+'%';e('w',Math.min(95,40+Math.round(p*55))+'%');e('t',(30+Math.random()*8|0)+'°C');e('r',m.t==='d'?'—':800+(Math.random()*400|0))});this.pLive();if(ch)this.rAll()},
+fin(m){m.st='idle';m.pz=0;m.dr=0;m.dc=0;const u=D.users[m.by];if(u){const h=u.h.find(x=>x.id===m.hid);if(h)h.st='done';this.nt(m.by,'เสร็จแล้ว ✅','กรุณามารับผ้าที่ '+m.n)}(m.w||[]).forEach(x=>this.nt(x,'ตู้ว่างแล้ว 🔔',m.n+' พร้อมให้ใช้งาน'));m.w=[];this.lg(m.n+' ทำงานเสร็จ');save();
  if(S&&S.u===m.by){this.toast('✅ '+m.n+' เสร็จแล้ว');this.confetti()}},
 rep(id){cur=D.M.find(x=>x.id===id);$('rn2').textContent=cur.n;$('rd').value='';this.open('sh-rep')},
 pickTag(el){document.querySelectorAll('#rtags .tag').forEach(t=>t.classList.remove('on'));el.classList.add('on');tag=el.textContent},
@@ -218,6 +243,32 @@ editP(){const u=U();$('en').value=u.n;$('er').value=u.r;$('eph').value=u.ph;$('e
 saveP(){const u=U(),p=$('ep').value,ph=$('eph').value.trim();if(!/^\d{9,10}$/.test(ph))return this.toast('เบอร์โทรไม่ถูกต้อง','e');if(p&&p.length<6)return this.toast('รหัสผ่านอย่างน้อย 6 ตัว','e');
  u.n=$('en').value.trim()||u.n;u.r=$('er').value.trim()||u.r;u.ph=ph;if(p)u.pw=hs(p);save();this.close('sh-edit');this.rUser();this.toast('บันทึกข้อมูลแล้ว')},
 openN(){const u=U();$('nl').innerHTML=u.no.map(n=>`<div class="rrow"><div><b style="font-size:.88rem">${esc(n.t)}</b><p class="mu" style="font-size:.78rem">${esc(n.d)}</p></div><small style="color:var(--p);white-space:nowrap">${tm(n.ts)}</small></div>`).join('')||'<p class="mu">ไม่มีการแจ้งเตือน</p>';u.no.forEach(n=>n.r=1);save();$('bell').classList.remove('has');this.open('sh-noti')},
+// ---------- PANEL ----------
+pm(){return cur&&D.M.find(x=>x.id===cur.id)},
+panel(id){cur=D.M.find(x=>x.id===id);if(!cur)return;if(cur.st==='idle'){mode=0;adds=[];promo='';cfg={t:1,r:2,s:1}}$('pnl').classList.add('on');this.rPanel()},
+pclose(){$('pnl').classList.remove('on')},
+pr(){const m=this.pm();if(m)this.rep(m.id)},
+pt(m){if(m.st==='maint')return'OUT OF SERVICE';if(m.st!=='busy')return'READY TO START';const l=Math.max(0,Math.ceil((m.end-(m.pz||Date.now()))/1000));return(m.pz?'PAUSED':m.t==='d'?'DRYING':'WASHING')+' ('+fmt(l)+' min remaining)'},
+pLive(){const m=this.pm();if(!m||m.st!=='busy'||!$('ptx'))return;const l=Math.max(0,Math.ceil((m.end-(m.pz||Date.now()))/1000));$('ptx').textContent=this.pt(m);$('pbi').style.width=(100-l/m.max*100)+'%'},
+ppause(){const m=this.pm();if(!m||m.st!=='busy'||m.by!==S.u)return;if(m.pz){m.end+=Date.now()-m.pz;m.pz=0;m.dr=0;m.dc=0;this.toast('ทำงานต่อแล้ว')}else{m.pz=Date.now();this.toast('หยุดชั่วคราว')}save();this.rPanel();this.rMach()},
+padd(){const m=this.pm();if(!m||m.st!=='busy'||m.by!==S.u)return;if(!m.pz)m.pz=Date.now();m.dr=1;save();this.rPanel();this.toast('เปิดประตูแล้ว เพิ่มผ้าได้เลย จากนั้นกด PAUSE/RESUME เพื่อทำงานต่อ')},
+pdoor(){const m=this.pm();if(!m)return;if(m.st==='idle'||(m.st==='busy'&&m.by===S.u&&m.pz)){if(m.st==='idle')m.dc=m.dc?0:1;else m.dr=m.dr?0:1;save();this.rPanel();this.rMach()}else this.toast('หยุดเครื่องชั่วคราวก่อนเปิดประตู','e')},
+dial(k){const m=this.pm();if(!m||m.st!=='idle')return;cfg[k]=(cfg[k]+1)%3;this.rPanel()},
+pset(){const m=this.pm();if(!m||m.st!=='idle')return;cur=m;$('bn').textContent=m.n;$('adw').style.display=m.t==='w'?'block':'none';this.rBook();this.open('sh-book')},
+pstart(){const m=this.pm();if(!m||m.st!=='idle')return;cur=m;this.pay()},
+door(o,run,k='p'){const pv=DS[k],sc=pv===undefined?o:pv,id='dr'+k;return `<svg viewBox="0 0 262 250" width="100%" style="display:block;margin:auto;max-width:280px"><defs><clipPath id="${id}"><circle cx="140" cy="120" r="82"/></clipPath></defs><circle cx="145" cy="127" r="112" fill="#cdc6ee"/><circle cx="136" cy="113" r="112" fill="#fff"/><circle cx="140" cy="120" r="110" fill="#f5f2ff"/><circle cx="140" cy="120" r="98" fill="#ebe7fa" stroke="#fff" stroke-width="2"/><circle cx="140" cy="120" r="90" fill="#d3dce2" stroke="#c0cad2" stroke-width="3"/><circle cx="140" cy="120" r="82" fill="#8e9aa4"/><circle cx="140" cy="120" r="70" fill="#a2adb6"/><circle cx="140" cy="120" r="56" fill="#b4bec6"/><circle cx="140" cy="120" r="40" fill="#97a3ac"/><g class="${run?'sp':''}"><circle cx="140" cy="120" r="62" fill="none" stroke="#7d8993" stroke-width="3" stroke-dasharray="2 9"/><g clip-path="url(#${id})"><ellipse cx="110" cy="167" rx="28" ry="15" fill="#f0a9b4" transform="rotate(-20 110 167)"/><ellipse cx="158" cy="171" rx="32" ry="16" fill="#f6dfa6" transform="rotate(15 158 171)"/><ellipse cx="188" cy="153" rx="22" ry="12" fill="#a9cde8"/><ellipse cx="126" cy="151" rx="20" ry="11" fill="#d9c6ef"/></g></g><g clip-path="url(#${id})"><path d="M50 137 Q75 127 100 137 T150 137 T200 137 T240 137 V210 H50 Z" fill="#6fb1d6" opacity=".6"/></g><rect x="30" y="53" width="10" height="22" rx="3" fill="#b9c3ca"/><rect x="30" y="165" width="10" height="22" rx="3" fill="#b9c3ca"/><g class="dg" data-o="${o?1:0}" data-k="${k}" style="transform-origin:42px 120px;transform:scaleX(${sc?.3:1});transition:transform .85s cubic-bezier(.34,1.25,.5,1)"><circle cx="140" cy="120" r="92" fill="#e6defd" fill-opacity=".6" stroke="#fff" stroke-width="5"/><circle cx="140" cy="120" r="92" fill="none" stroke="#c9bff0" stroke-width="2"/><path d="M85 85 Q100 62 128 56" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".9"/></g></svg>`},
+rPanel(){const P=$('pnl');if(!P.classList.contains('on'))return;const m=this.pm();if(!m)return this.pclose();cur=m;
+ const b=m.st==='busy',me=b&&m.by===S.u,i=m.st==='idle',pz=b&&!!m.pz,dr=this.dopen(m),c=b?(m.cfg||{t:1,r:2,s:1}):cfg,mi=b?(m.mi||0):mode,
+ nm=(m.t==='d'?['DRY QUICK','DRY SOFT']:['QUICK','COTTONS'])[mi]||'COTTONS',l=b?Math.max(0,Math.ceil((m.end-(m.pz||Date.now()))/1000)):0,pg=b?100-l/m.max*100:0,
+ dl=(k,v,lab,n)=>`<div><div class="dl" style="--v:${(n+1)/3*100};${i?'':'cursor:default'}" ${i?`onclick="A.dial('${k}')"`:''}><b>${v}</b></div><small class="dlb">${lab}</small></div>`;
+ let s=0;if(i){const x=this.sub();s=x-this.disc(x)}
+ P.innerHTML=`<div class="row" style="margin-bottom:12px"><button class="pb" style="padding:9px 14px" onclick="A.pclose()">‹ กลับ</button><b style="font-size:.9rem">${esc(m.n)}</b>${i?'<button class="pb" style="padding:9px 12px" onclick="A.pr()">⚠️</button>':'<span style="width:44px"></span>'}</div>
+ <div class="nmi" style="border-radius:16px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;font-size:.7rem;font-weight:500;letter-spacing:.5px;gap:6px"><b id="pcl">${CK()}</b><span style="display:flex;gap:6px;align-items:center">${WF}<span id="pwf">${navigator.onLine?'WI-FI CONNECTED':'OFFLINE'}</span></span><span style="display:flex;gap:6px;align-items:center">${SH}${nm}</span></div>
+ <div style="margin:16px 0 8px">${this.door(dr,b&&!pz,'p'+m.id)}</div>
+ <div class="nmo" style="padding:14px 16px;margin:8px 0 18px"><small class="dlb" style="text-align:left;margin:0">CYCLE PROGRESS</small><div id="ptx" style="font-weight:500;margin:4px 0 10px;font-size:.9rem">${this.pt(m)}</div><div class="pbr"><i id="pbi" style="width:${pg}%"></i></div></div>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px"><button class="pb ${pz?'act':''}" ${me?'':'disabled'} onclick="A.ppause()">PAUSE/RESUME</button><button class="pb" ${me?'':'disabled'} onclick="A.padd()">ADD ITEM</button><button class="pb ${dr?'act':''}" ${i||(me&&pz)?'':'disabled'} onclick="A.pdoor()">OPEN DOOR</button><button class="pb" ${i?'':'disabled'} onclick="A.pset()">SETTINGS</button></div>
+ <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px">${dl('t',TP[c.t]+'°C','TEMP.',c.t)}${dl('r',RP[c.r],'RPM SPIN',c.r)}${dl('s',SL[c.s],'SOIL',c.s)}</div>
+ ${i?`<button class="btn bp" onclick="A.pstart()">▶ START · ฿${s}</button><p style="text-align:center;font-size:.72rem;color:#7b70a6;margin-top:10px">แตะวงกลมเพื่อปรับค่า · SETTINGS เลือกโปรแกรม/โค้ดส่วนลด</p>`:me?'<p style="text-align:center;font-size:.8rem;color:#7b70a6">เมื่อเสร็จ ระบบจะแจ้งเตือนอัตโนมัติ</p>':m.st==='maint'?'<p style="text-align:center;font-size:.8rem;color:#dc2626">ตู้นี้ปิดซ่อม</p>':'<p style="text-align:center;font-size:.8rem;color:#7b70a6">ตู้นี้กำลังถูกใช้งานโดยผู้อื่น</p>'}`},
 // ---------- ADMIN ----------
 rAdm(){const T=[['dash','📊 ภาพรวม'],['mach','🧺 ตู้ซัก'],['usr','👥 สมาชิก'],['rep','⚠️ แจ้งซ่อม'],['msg','💬 ข้อความ'],['set','⚙️ ตั้งค่า']],pn=D.reps.filter(r=>r.st!=='resolved').length;
  $('atabs').innerHTML=T.map(([k,l])=>`<div class="tb ${at===k?'on':''}" onclick="at='${k}';A.rAdm()">${l}${k==='rep'&&pn?' ('+pn+')':''}</div>`).join('');$('abody').innerHTML=this['a_'+at]()||'<div class="hint">โหลดส่วนนี้ไม่สำเร็จ ลองสลับแท็บอีกครั้ง</div>';if(at==='usr')this.uList()},
@@ -226,13 +277,13 @@ a_dash(){const rv=D.rv,tot=Object.values(rv).reduce((a,b)=>a+b,0),bz=D.M.filter(
  ${pn?`<div class="hint" style="cursor:pointer" onclick="at='rep';A.rAdm()">⚠️ มีเรื่องแจ้งซ่อมรอดำเนินการ ${pn} รายการ — กดเพื่อดู</div>`:''}
  <div class="g"><div class="cd"><h3 class="t">รายได้ 7 วันล่าสุด (บาท)</h3><div class="chart" style="margin:0">${d.map((v,i)=>`<div><small style="color:var(--tx)">${v||''}</small><i style="height:${v/mx*70}%"></i>${day(6-i).slice(5)}</div>`).join('')}</div></div>
  <div class="cd"><h3 class="t">ความเคลื่อนไหวล่าสุด</h3>${D.logs.slice(0,8).map(l=>`<div class="rrow" style="font-size:.82rem"><span>${esc(l.t)}</span><small class="mu" style="white-space:nowrap">${tm(l.ts)}</small></div>`).join('')||'<p class="mu" style="font-size:.85rem">ยังไม่มีรายการ</p>'}</div></div>`},
-a_mach(){return `<div class="row" style="margin-bottom:14px"><h3 class="t" style="margin:0">จัดการตู้ (${D.M.length})</h3><button class="btn bp bs" onclick="A.addM()">＋ เพิ่มตู้</button></div><div class="g">`+D.M.map(m=>{const b=m.st==='busy',x=m.st==='maint',l=b?Math.max(0,Math.ceil((m.end-Date.now())/1000)):0;
+a_mach(){return `<div class="row" style="margin-bottom:14px"><h3 class="t" style="margin:0">จัดการตู้ (${D.M.length})</h3><button class="btn bp bs" onclick="A.addM()">＋ เพิ่มตู้</button></div><div class="g">`+D.M.map(m=>{const b=m.st==='busy',x=m.st==='maint',l=b?Math.max(0,Math.ceil((m.end-(m.pz||Date.now()))/1000)):0;
  return `<div class="cd"><div class="row" style="gap:10px"><div class="mi" style="width:48px;height:48px;font-size:1.5rem">${m.t==='d'?'🌬️':'🧺'}</div><div style="flex:1"><b>${esc(m.n)}</b><br><span class="bg ${x?'dg':b?'pr':'ok'}">${x?'ปิดซ่อม':b?'ทำงาน':'ว่าง'}</span></div></div>
  ${b?`<p style="font-size:.82rem;margin:10px 0">ผู้ใช้: <b>${esc(D.users[m.by]?D.users[m.by].n:'-')}</b> · เหลือ <b id="al${m.id}">${fmt(l)}</b></p>`:'<div style="height:10px"></div>'}
  <div class="row" style="gap:8px;justify-content:flex-start;flex-wrap:wrap"><button class="btn bo bs" ${b?'disabled':''} onclick="A.togM('${m.id}')">${x?'✅ เปิดใช้งาน':'⛔ ระงับตู้'}</button>${b?`<button class="btn bx bs" onclick="A.stopM('${m.id}')">⏹ หยุด+คืนเงิน</button>`:''}<button class="btn bo bs" ${b?'disabled':''} onclick="A.delM('${m.id}')">🗑️</button></div></div>`}).join('')+'</div>'},
 togM(id){const m=D.M.find(x=>x.id===id);m.st=m.st==='maint'?'idle':'maint';this.lg('แอดมินเปลี่ยนสถานะ '+m.n);save();this.rAdm()},
 stopM(id){this.conf('หยุดตู้และคืนเงินให้ลูกค้า?',()=>this.doStop(id))},
-doStop(id){const m=D.M.find(x=>x.id===id);if(!m||m.st!=='busy')return;const u=D.users[m.by];if(u){u.cr+=m.paid;u.tx.unshift({t:'คืนเงิน '+m.n,a:m.paid,ts:Date.now()});const h=u.h.find(x=>x.id===m.hid);if(h)h.st='ref';this.nt(m.by,'คืนเงินแล้ว','แอดมินหยุด '+m.n+' และคืนเงิน ฿'+m.paid)}D.rv[day()]=Math.max(0,(D.rv[day()]||0)-m.paid);m.st='idle';this.lg('หยุด '+m.n+' และคืนเงิน ฿'+m.paid);save();this.rAdm();this.toast('คืนเงินเรียบร้อย')},
+doStop(id){const m=D.M.find(x=>x.id===id);if(!m||m.st!=='busy')return;const u=D.users[m.by];if(u){u.cr+=m.paid;u.tx.unshift({t:'คืนเงิน '+m.n,a:m.paid,ts:Date.now()});const h=u.h.find(x=>x.id===m.hid);if(h)h.st='ref';this.nt(m.by,'คืนเงินแล้ว','แอดมินหยุด '+m.n+' และคืนเงิน ฿'+m.paid)}D.rv[day()]=Math.max(0,(D.rv[day()]||0)-m.paid);m.st='idle';m.pz=0;m.dr=0;m.dc=0;this.lg('หยุด '+m.n+' และคืนเงิน ฿'+m.paid);save();this.rAdm();this.toast('คืนเงินเรียบร้อย')},
 delM(id){this.conf('ลบตู้นี้ถาวร?',()=>{D.M=D.M.filter(x=>x.id!==id);this.lg('ลบตู้');save();this.rAdm()})},
 addM(){this.ask('ชื่อตู้ใหม่ (ขึ้นต้น "ตู้อบ" = ตู้อบผ้า)','เช่น เครื่องฝาหน้า No.4',v=>{if(v.length>40)return this.toast('ชื่อยาวเกินไป','e');D.M.push({id:'M'+Date.now(),n:v,t:/อบ/.test(v)?'d':'w',st:'idle',w:[]});this.lg('เพิ่มตู้ '+v);save();this.rAdm()})},
 a_usr(){return `<input class="inp" placeholder="🔍 ค้นหาชื่อ / username / ห้อง" value="${esc(q)}" oninput="q=this.value;A.uList()"><div class="cd" id="ul"></div>`},
@@ -264,5 +315,6 @@ Object.keys(A).forEach(k=>{const f=A[k];if(typeof f!=='function'||k==='toast')re
 window.addEventListener('storage',e=>{if(e.key!=='wm4'||!e.newValue)return;try{D=JSON.parse(e.newValue)}catch(x){return}
  if(!S)return;if(S.r==='user'&&(!D.users[S.u]||D.users[S.u].ban)){A.toast('บัญชีถูกปิดหรือระงับ','e');return A.logout()}
  const a=document.activeElement;if(document.querySelector('.ov.on')||(a&&a.tagName==='INPUT'))return;A.rAll()});
+new MutationObserver(()=>A.anim()).observe($('pnl'),{childList:true});new MutationObserver(()=>A.anim()).observe($('mlist'),{childList:true});
 A.init();
 </script></body></html>
