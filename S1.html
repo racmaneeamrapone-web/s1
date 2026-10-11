@@ -94,7 +94,7 @@ html[data-t=dark] body.ad{--bg:#0b1220;--cd:#131c2e;--tx:#e8eefc;--mu:#8da0bd;--
 .brand{text-align:center;margin-bottom:14px}.brand h1{font-size:2rem;color:var(--p)}.brand p{font-size:.82rem}.ch{margin-bottom:14px}.ch b{display:block;font-size:1.05rem}.ch small{color:var(--mu);font-size:.76rem}
 .sg2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 auto 14px}.tab2{text-align:center;padding:13px;border-radius:18px;font-weight:600;cursor:pointer;background:var(--gs);border:2px solid transparent;color:var(--mu);box-shadow:0 6px 16px rgba(91,33,182,.1);transition:.2s}.tab2:active{transform:translateY(3px)}.tab2.on{border-color:#8b5cf6;color:#6d28d9}#t-staff.on{border-color:#0d9488;color:#0f766e}
 .cw .ac{display:none;border-top:4px solid var(--p)}.cw .ac.on{display:block}.ac.sta{--p:#0d9488;--pd:#0f766e;--gl:rgba(13,148,136,.25);--sh:rgba(15,118,110,.45)}
-@media(min-width:860px){.au{max-width:940px}.cw{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}.cw .ac{display:block}.sg2{display:none}}
+
 .app{max-width:600px}.sheet{max-width:560px}.bdy{padding:20px 20px 112px}.mg{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}.mc2{padding:14px}
 .bell i{min-width:16px;height:16px;border-radius:9px;font-size:.58rem;color:#fff;font-style:normal;text-align:center;line-height:16px;padding:0 4px;top:-5px;right:-5px;width:auto}
 .sp{animation-duration:.9s}.sp2{transform-origin:131px 172px;animation:dsp .5s linear infinite reverse}.knob{animation:dsp 4s linear infinite}
@@ -106,12 +106,42 @@ html[data-t=dark] body.ad{--bg:#0b1220;--cd:#131c2e;--tx:#e8eefc;--mu:#8da0bd;--
 .avf{position:relative;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-size:.7rem;font-weight:600;border:2px solid var(--cd);overflow:hidden;flex-shrink:0}.avf img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .qav{display:flex;align-items:center;margin:2px 0 4px;min-height:32px}.qb{position:relative;margin-left:-6px}.qb:first-child{margin-left:0}.qn{position:absolute;bottom:-6px;right:-4px;background:var(--p);color:#fff;border-radius:8px;font-size:.55rem;padding:0 4px;font-weight:600;line-height:1.5}
 .syp{font-size:.62rem;font-weight:600;padding:3px 9px;border-radius:10px;background:rgba(127,127,127,.16);display:inline-block;margin-top:6px}.syp[data-s=ok]{color:var(--ok)}.syp[data-s=off]{color:var(--dg)}.syp[data-s=sync],.syp[data-s=ro]{color:var(--wr)}.syp[data-s=local]{color:var(--mu)}
+
+/* ===== Desktop / Windows layout (หน้าจอกว้าง) ===== */
+.dsk{display:none}
+@media(min-width:900px){
+ #s-auth{align-items:center}
+ .au{max-width:1040px;display:grid;grid-template-columns:1fr 440px;column-gap:64px;align-content:center;padding:36px}
+ .au .brand{grid-column:1;grid-row:1/4;text-align:left;align-self:center;margin:0}
+ .au .brand h1{font-size:3.6rem;line-height:1.05}
+ .au .brand .door{width:150px;height:150px;margin:0 0 20px;border-width:10px}
+ .au .brand p{font-size:1.02rem}
+ .au .sg2{grid-column:2;grid-row:1;margin:0 0 14px}
+ .au .cw{grid-column:2;grid-row:2}
+ .au .dsk{display:block;margin-top:28px;padding:0}
+ .dsk li{list-style:none;margin:12px 0;font-size:.98rem;color:var(--tx)}
+ .app{max-width:1360px;display:grid;grid-template-columns:240px 1fr;grid-template-rows:auto 1fr;box-shadow:none}
+ .app .hd{grid-column:2;grid-row:1;margin:16px 28px 0}
+ .app .bdy{grid-column:2;grid-row:2;padding:24px 28px 32px}
+ .app .nav{grid-column:1;grid-row:1/3;position:static;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:6px;padding:24px 14px;border-top:0;border-right:1px solid var(--bd);box-shadow:none}
+ .nav:before{content:'🧺 WashMate';order:-2;font-weight:700;font-size:1.25rem;color:var(--p);padding:2px 14px 20px}
+ .app .ni{flex-direction:row;width:auto;gap:12px;padding:12px 14px;border-radius:14px;font-size:.92rem;justify-content:flex-start;cursor:pointer}
+ .ni b{font-size:1.25rem}.ni:hover{background:var(--gl)}.ni.on{background:var(--gl)}.ni.on b{transform:none}
+ .nav .fab{order:-1;margin:0 0 14px;width:100%;height:52px;border-radius:16px;border:0;font-size:1.1rem;gap:8px}
+ .nav .fab:after{content:'สแกน QR หน้าตู้';font-size:.92rem;font-weight:600}
+ .app .mini{left:264px;right:28px;bottom:22px}
+ .pn{padding-left:max(16px,calc((100% - 560px)/2));padding-right:max(16px,calc((100% - 560px)/2))}
+ .mg{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+ #v-hist,#v-chat,#v-prof{max-width:760px;margin:0 auto}
+ .ov{align-items:center}.sheet{max-width:520px;border-radius:24px;border:1px solid var(--bd);transform:scale(.92)}.ov.on .sheet{transform:none}
+ .adm{max-width:1400px}.adm .bdy{padding:24px 28px}.g{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+}
 </style></head><body>
 <div class="trans" id="trans"><span>🧬</span><h3 id="tt" style="color:var(--p)">กำลังเข้าสู่ระบบ...</h3></div>
 <div id="toast"></div><div class="cfx" id="cfx"></div>
 
 <!-- AUTH -->
-<div class="scr on" id="s-auth"><div class="au"><div class="brand"><div class="door"><i></i></div><h1>WashMate</h1><p class="mu">ระบบซักผ้าหยอดเหรียญออนไลน์ · v11</p><span class="syp"></span></div>
+<div class="scr on" id="s-auth"><div class="au"><div class="brand"><div class="door"><i></i></div><h1>WashMate</h1><p class="mu">ระบบซักผ้าหยอดเหรียญออนไลน์ · v11</p><span class="syp"></span><ul class="dsk"><li>🧺 เครื่องซักผ้าทุกเครื่อง เห็นสถานะพร้อมกันทุกคน</li><li>⏱️ จองคิวต่อ +1 +2 +3 พร้อมรูปโปรไฟล์</li><li>💬 แจ้งเตือนผ่าน LINE เมื่อผ้าใกล้เสร็จ</li><li>🧹 เรียกแม่บ้านนำผ้าออกได้ในแอป</li></ul></div>
 <div class="sg2"><div class="tab2 on" id="t-user" onclick="A.go('login')">👤 ลูกค้า</div><div class="tab2" id="t-staff" onclick="A.go('staff')">🛡️ ผู้ดูแล</div></div>
 <div class="cw"><div class="ac on" id="c-user"><div class="ch"><b>👤 สำหรับลูกค้า</b><small>เข้าสู่ระบบหรือสมัครสมาชิก</small></div>
 <div class="fm on" id="f-login"><div class="hint">🔐 ต้อง <b>สมัครสมาชิกก่อน</b> จึงจะเข้าใช้งานได้</div>
@@ -120,10 +150,10 @@ html[data-t=dark] body.ad{--bg:#0b1220;--cd:#131c2e;--tx:#e8eefc;--mu:#8da0bd;--
 <div class="row" style="margin-top:16px"><span class="lk" onclick="A.go('reg')">สมัครสมาชิกใหม่</span><span class="lk mu" onclick="A.go('forgot')">ลืมรหัสผ่าน?</span></div>
 </div>
 <div class="fm" id="f-reg"><h3 style="margin-bottom:12px">สมัครสมาชิก</h3>
-<span class="lb">ชื่อ-นามสกุล</span><input class="inp" id="rn"><span class="lb">Username (a-z 0-9 _ . ยาว 3-20)</span><input class="inp" id="ru"><span class="lb">เบอร์โทร (ใช้ยืนยันตอนลืมรหัสผ่าน)</span><input class="inp" id="rph" inputmode="numeric"><span class="lb">เลขห้องพัก</span><input class="inp" id="rr" placeholder="เช่น A-204"><span class="lb">รหัสผ่าน (6 ตัวขึ้นไป)</span><input class="inp" id="rp" type="password"><span class="lb">ยืนยันรหัสผ่าน</span><input class="inp" id="rp2" type="password">
+<span class="lb">ชื่อ-นามสกุล</span><input class="inp" id="rn"><span class="lb">Username (a-z 0-9 _ . ยาว 3-20)</span><input class="inp" id="ru"><span class="lb">เบอร์โทร (ใช้ยืนยันตอนลืมรหัสผ่าน)</span><input class="inp" id="rph" inputmode="numeric"><span class="lb">เลขห้องพัก</span><input class="inp" id="rr" placeholder="เช่น A-204"><span class="lb">รหัสผ่าน (6 ตัวขึ้นไป)</span><input class="inp" id="rp" type="password"><span class="lb">ยืนยันรหัสผ่าน</span><input class="inp" id="rp2" type="password" onkeydown="if(event.key==='Enter')A.reg()">
 <button class="btn bp" onclick="A.reg()">ยืนยันสมัคร (รับเครดิตต้อนรับ ฿20)</button><p class="lk" style="margin-top:14px" onclick="A.go('login')">← กลับไปเข้าสู่ระบบ</p></div>
 <div class="fm" id="f-forgot"><h3 style="margin-bottom:6px">🔓 ลืมรหัสผ่าน</h3><p class="mu" style="font-size:.8rem;margin-bottom:12px">ยืนยันตัวตนด้วย Username + เบอร์โทรที่ใช้สมัคร แล้วตั้งรหัสใหม่</p>
-<input class="inp" id="fu" placeholder="Username"><input class="inp" id="fph" placeholder="เบอร์โทรที่ลงทะเบียน" inputmode="numeric"><input class="inp" id="fp" type="password" placeholder="รหัสผ่านใหม่ (6 ตัวขึ้นไป)">
+<input class="inp" id="fu" placeholder="Username"><input class="inp" id="fph" placeholder="เบอร์โทรที่ลงทะเบียน" inputmode="numeric"><input class="inp" id="fp" type="password" placeholder="รหัสผ่านใหม่ (6 ตัวขึ้นไป)" onkeydown="if(event.key==='Enter')A.forgot()">
 <button class="btn bp" onclick="A.forgot()">ตั้งรหัสผ่านใหม่</button><p class="lk" style="margin-top:14px" onclick="A.go('login')">← กลับ</p></div>
 </div><div class="ac sta" id="c-staff"><div class="ch"><b>🛡️ สำหรับผู้ดูแลระบบ</b><small>จัดการตู้ สมาชิก และรายได้</small></div><div class="fm on" id="f-staff"><div class="hint">ค่าเริ่มต้น: admin / admin1234 (เปลี่ยนได้ในเมนูตั้งค่า)</div>
 <input class="inp" id="su" placeholder="Admin username"><input class="inp" id="sp" type="password" placeholder="รหัสผ่านผู้ดูแล" onkeydown="if(event.key==='Enter')A.staff()">
